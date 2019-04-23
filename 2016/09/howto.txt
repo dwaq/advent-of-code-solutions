@@ -1,0 +1,10 @@
+find first parenthesis
+    add to length any charcters before that
+
+send remaining data to uncompress()
+
+find marker, peform calculation on that
+set mult = m2 * old m2
+send m1 charcters to new function (line 6)
+
+# 12*12*14*10*12 = 241920
