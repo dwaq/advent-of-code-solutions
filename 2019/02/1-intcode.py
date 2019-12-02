@@ -18,24 +18,18 @@ position = 0
 
 while(instructions[position] != 99):
     i = instructions[position]
-    print(instructions)
-    #print (position, i)
+
+    a = instructions[instructions[position+1]]
+    b = instructions[instructions[position+2]]
 
     if(i==1):
-        #print("add")
-        #print(instructions[instructions[position+1]], instructions[instructions[position+2]])
-        a = instructions[instructions[position+1]]
-        b = instructions[instructions[position+2]]
         instructions[instructions[position+3]] = a+b
     elif(i==2):
-        #print("mult")
-        a = instructions[instructions[position+1]]
-        b = instructions[instructions[position+2]]
         instructions[instructions[position+3]] = a*b
     else:
         print("ERROR")
 
     position += 4
 
-print(instructions)
+#print(instructions)
 print(instructions[0])
