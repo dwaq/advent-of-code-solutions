@@ -129,30 +129,10 @@ for s in same:
 
     #print("steps:", steps)
 
-    # split that string into a list
-    point = s.split(",")
-    
-    # also add distance to that point
-    point.append(steps)
-    
-    #print(point)
-
-    # append that info into crosses
-    crosses.append(point)
+    # only care about the steps (not the location, so only add steps)
+    crosses.append(steps)
 
 #print("crosses:", crosses)
 
-# set a huge distance and assume it will get shorter later
-shortestDistance = 100000000000000000000000
-
-# this time we only care about the shortest steps
-for c in crosses:
-    # the distance is the third element (steps from before)
-    distance = c[2]
-
-    # if it's shorter, set the shortest distance
-    if (distance < shortestDistance):
-        shortestDistance = distance
-
-# print the shortest distance to the first cross
-print(shortestDistance)
+# crosses contains only the steps now so just print the smallest element
+print(min(crosses))
