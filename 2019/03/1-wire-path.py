@@ -11,11 +11,18 @@ f = first.split(",")
 f_currentPosition = [0,0]
 f_traveledPostions = []
 
+# loop through each instruction
 for i in f:
+    # the distance is the number after the direction (converted to int)
+    # add 1 because python's range() starts from 0 so we miss the first move
     distance = int(i[1:])+1
 
+    # check the first letter for the direction
     if(i[0] == "R"):
+        # move starting from 1 (this ignores the origin and locations that wouldn't move)
+        # added 1 to distance earlier to work around this
         for d in range(1,distance):
+            # append each location that we touch while moving
             f_traveledPostions.append([f_currentPosition[0], f_currentPosition[1]+d])
 
     elif(i[0] == "L"):
@@ -30,14 +37,12 @@ for i in f:
         for d in range(1,distance):
             f_traveledPostions.append([f_currentPosition[0]-d, f_currentPosition[1]])
 
-    else:
-        print("ERROR")
     # set current position to last traveled
     f_currentPosition = f_traveledPostions[-1]
 
 #print(f_traveledPostions)
 
-# second path
+# second path (same theory as first -- just didn't know how to make this into a function)
 
 s = second.split(",")
 s_currentPosition = [0, 0]
@@ -62,8 +67,6 @@ for i in s:
         for d in range(1,distance):
             s_traveledPostions.append([s_currentPosition[0]-d, s_currentPosition[1]])
 
-    else:
-        print("ERROR")
     # set current position to last traveled
     s_currentPosition = s_traveledPostions[-1]
 
@@ -72,8 +75,10 @@ for i in s:
 # get common items
 
 # convert each array to string for easier comparision
+# I don't know how to compare an array of arrays
 f_str_traveledPostions = []
 for p in f_traveledPostions:
+    # this format is the easiest to turn back into an array later
     f_str_traveledPostions.append(str(p[0])+","+str(p[1]))
 
 s_str_traveledPostions = []
@@ -83,24 +88,38 @@ for p in s_traveledPostions:
 #print(f_str_traveledPostions)
 #print(s_str_traveledPostions)
 
+# find the common elements in both lists (where they cross)
+# https://stackoverflow.com/a/2864863/7564623
 same = list(set(f_str_traveledPostions).intersection(s_str_traveledPostions))
 
 #print(same)
 
+# convert back from string into list
+# numbers still in string, convert to int later
 crosses = []
 for s in same:
     crosses.append(s.split(","))
 
 #print(crosses)
 
+# set a huge distance and assume it will get shorter later
 shortestDistance = 100000000000000000000000
 
+# calculate the manhattan distance and get the shortest one
 for c in crosses:
+    # reset the distance for each cross
     distance = 0
+    # convert each element from that cross point (X & Y) into int
+    # then add them all up
+    # get the absolute distance
     for el in c:
         distance+=abs(int(el))
+    
     #print(distance, shortestDistance)
+
+    # if it's shorter, set the shortest distance
     if (distance < shortestDistance):
         shortestDistance = distance
 
+# print the shortest distance to the first cross
 print(shortestDistance)
