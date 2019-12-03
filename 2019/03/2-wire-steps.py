@@ -11,6 +11,9 @@ f = first.split(",")
 f_currentPosition = [0,0]
 f_traveledPostions = []
 
+# start from the origin
+steps = 0
+
 # loop through each instruction
 for i in f:
     # the distance is the number after the direction (converted to int)
@@ -22,20 +25,25 @@ for i in f:
         # move starting from 1 (this ignores the origin and locations that wouldn't move)
         # added 1 to distance earlier to work around this
         for d in range(1,distance):
-            # append each location that we touch while moving
-            f_traveledPostions.append([f_currentPosition[0], f_currentPosition[1]+d])
+            # add a step each time
+            steps += 1
+            # append each location that we touch while moving (and the number of steps to get there)
+            f_traveledPostions.append([f_currentPosition[0], f_currentPosition[1]+d, steps])
 
     elif(i[0] == "L"):
         for d in range(1,distance):
-            f_traveledPostions.append([f_currentPosition[0], f_currentPosition[1]-d])
+            steps += 1
+            f_traveledPostions.append([f_currentPosition[0], f_currentPosition[1]-d,steps])
 
     elif(i[0] == "U"):
         for d in range(1,distance):
-            f_traveledPostions.append([f_currentPosition[0]+d, f_currentPosition[1]])
+            steps += 1
+            f_traveledPostions.append([f_currentPosition[0]+d, f_currentPosition[1],steps])
 
     elif(i[0] == "D"):
         for d in range(1,distance):
-            f_traveledPostions.append([f_currentPosition[0]-d, f_currentPosition[1]])
+            steps += 1
+            f_traveledPostions.append([f_currentPosition[0]-d, f_currentPosition[1],steps])
 
     # set current position to last traveled
     f_currentPosition = f_traveledPostions[-1]
@@ -48,24 +56,31 @@ s = second.split(",")
 s_currentPosition = [0, 0]
 s_traveledPostions = []
 
+# reset steps
+steps = 0
+
 for i in s:
     distance = int(i[1:])+1
 
     if(i[0] == "R"):
         for d in range(1,distance):
-            s_traveledPostions.append([s_currentPosition[0], s_currentPosition[1]+d])
+            steps += 1
+            s_traveledPostions.append([s_currentPosition[0], s_currentPosition[1]+d, steps])
 
     elif(i[0] == "L"):
         for d in range(1,distance):
-            s_traveledPostions.append([s_currentPosition[0], s_currentPosition[1]-d])
+            steps += 1
+            s_traveledPostions.append([s_currentPosition[0], s_currentPosition[1]-d, steps])
 
     elif(i[0] == "U"):
         for d in range(1,distance):
-            s_traveledPostions.append([s_currentPosition[0]+d, s_currentPosition[1]])
+            steps += 1
+            s_traveledPostions.append([s_currentPosition[0]+d, s_currentPosition[1], steps])
 
     elif(i[0] == "D"):
         for d in range(1,distance):
-            s_traveledPostions.append([s_currentPosition[0]-d, s_currentPosition[1]])
+            steps += 1
+            s_traveledPostions.append([s_currentPosition[0]-d, s_currentPosition[1], steps])
 
     # set current position to last traveled
     s_currentPosition = s_traveledPostions[-1]
@@ -96,26 +111,44 @@ same = list(set(f_str_traveledPostions).intersection(s_str_traveledPostions))
 
 # convert back from string into list
 # numbers still in string, convert to int later
+# this code also calculates the distance to those points
 crosses = []
 for s in same:
-    crosses.append(s.split(","))
+    # find that point in the first path
+    # take the cross position and find the index of it in the string (where its formatted the same)
+    location = f_str_traveledPostions.index(s)
+    # get the steps from that location
+    # the steps are stored in the original array (before it was converted to string)
+    # formatted as: [x, y, steps] so use [2] to get the steps
+    steps = f_traveledPostions[location][2]
 
-#print(crosses)
+    # now get that point in the second path
+    location = s_str_traveledPostions.index(s)
+    # add it this time to get the total
+    steps += s_traveledPostions[location][2]
+
+    #print("steps:", steps)
+
+    # split that string into a list
+    point = s.split(",")
+    
+    # also add distance to that point
+    point.append(steps)
+    
+    #print(point)
+
+    # append that info into crosses
+    crosses.append(point)
+
+#print("crosses:", crosses)
 
 # set a huge distance and assume it will get shorter later
 shortestDistance = 100000000000000000000000
 
-# calculate the manhattan distance and get the shortest one
+# this time we only care about the shortest steps
 for c in crosses:
-    # reset the distance for each cross
-    distance = 0
-    # convert each element from that cross point (X & Y) into int
-    # then add them all up
-    # get the absolute distance
-    for el in c:
-        distance+=abs(int(el))
-    
-    #print(distance, shortestDistance)
+    # the distance is the third element (steps from before)
+    distance = c[2]
 
     # if it's shorter, set the shortest distance
     if (distance < shortestDistance):
