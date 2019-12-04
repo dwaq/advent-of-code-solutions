@@ -6,14 +6,17 @@
 
 total = 0
 
-for n in range(137683,596253+1):
+# open a file to store all passwords
+f = open("passwords.txt", "w")
+
+for n in range(137683, 596253+1):
     # convert to string
     s = str(n)
     # split into letters
     l = list(s)
     # convert back to ints
     i = [int(letter) for letter in l]
-    
+
     # check for adjacent digits
     adjacent = False
     # don't loop through the last one because we're checking next vs current
@@ -37,6 +40,10 @@ for n in range(137683,596253+1):
         # checked everything; add to total if still true
         if (increase == True):
             #print("\tdigits increase:", n)
-            total+=1
+            # write correct number to file
+            f.write(str(n)+"\n")
+            total += 1
 
 print("total: ", total)
+# close it
+f.close()
