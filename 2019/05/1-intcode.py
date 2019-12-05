@@ -56,9 +56,8 @@ while(instructions[position] != 99):
         instructions[newPosition] = inputValue
         position += 2
     elif(i==4):
-        newPosition = instructions[position+1]
         # outputs the value of its only parameter
-        outputValue = instructions[newPosition]
+        outputValue = instructions[position+1] if mode1 else instructions[instructions[position+1]]
         print("Output at", position, "is", outputValue)
         position += 2
     else:
