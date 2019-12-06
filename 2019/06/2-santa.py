@@ -51,20 +51,31 @@ for orbit in orbits[1:]:
     # set as child
     tree[orbit[1]] = Node(orbit[1], parent=tree[orbit[0]])
 
-#print(root)
+#print(orbits)
 
-# display full tree
-#for pre, fill, node in RenderTree(root):
-#    print("%s%s" % (pre, node.name))
+you_i = 0
+san_i = 0
+# find where YOU and SAN are inside the orbits list
+for x, o in enumerate(orbits):
+    if (o[1] == 'YOU'):
+        you_i = x
+    if (o[1] == 'SAN'):
+        san_i = x
 
-# get the paths of every orbit
-paths = root.descendants
-#print(paths)
+# converts each orbit path to a string
+# then splits based on the slash
+# this gives all of the transfers needed to get to that point
+you = str(tree[orbits[you_i][0]]).split('/')
+san = str(tree[orbits[san_i][0]]).split('/')
 
-numberOfOrbits = 0
 
-# for each path, add it's depth to the number of orbits
-for path in paths:
-    numberOfOrbits += path.depth
+matchPoint = 0
+# find the point at which the paths are different
+while(you[matchPoint] == san[matchPoint]):
+    matchPoint+=1
 
-print("Total number of Orbits:", numberOfOrbits)
+# take the length from where the paths are different to the end
+# and add them to get the total number of transfers
+transfers = len(you[matchPoint:]) + len(san[matchPoint:])
+
+print("Transfers required:", transfers)
