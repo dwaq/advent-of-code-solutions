@@ -35,6 +35,17 @@ for orbit in orbits[1:]:
 #print(root)
 
 # display full tree
-#print(RenderTree(tree[orbits[0][0]]))
 for pre, fill, node in RenderTree(root):
     print("%s%s" % (pre, node.name))
+
+# get the paths of every orbit
+paths = root.descendants
+#print(paths)
+
+numberOfOrbits = 0
+
+# for each path, add it's depth to the number of orbits
+for path in paths:
+    numberOfOrbits += path.depth
+
+print("Total number of Orbits:", numberOfOrbits)
