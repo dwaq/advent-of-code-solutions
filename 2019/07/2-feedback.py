@@ -27,16 +27,25 @@ for possibility in possibilities:
 # amplifier instructions (reset for each loop)
 intcode = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5"
 
-instructions = intcode.split(",")
+listOfInstructions = intcode.split(",")
 
 # convert all numbers to int
-instructions = [int(x) for x in instructions]
+listOfInstructions = [int(x) for x in listOfInstructions]
 
-# current instruction position
-ip = 0
+# start at the first amp
+amp = 0
 
+# each amp has its own instructions
+instructions = [0,0,0,0,0]
+for i in range(5):
+    instructions[i] = listOfInstructions
+
+# each amp has its own instruction position
+ip = [0,0,0,0,0]
+
+# each amp has their own count of this
 # multiple input instructions per stage
-inputOccurrence = 0
+inputOccurrence = [0,0,0,0,0]
 
 # end at 99
 while(instructions[ip] != 99):
