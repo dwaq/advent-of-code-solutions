@@ -33,88 +33,88 @@ instructions = intcode.split(",")
 instructions = [int(x) for x in instructions]
 
 # current instruction position
-position = 0
+ip = 0
 
 # multiple input instructions per stage
 inputOccurrence = 0
 
 # end at 99
-while(instructions[position] != 99):
+while(instructions[ip] != 99):
     # current op code (lowest 2 digits)
-    i = instructions[position]%100
+    i = instructions[ip]%100
     
     # get mode of each parameter
     # // does floor division (no floats)
     # %10 only gets that digit
-    mode1 = (instructions[position]//  100)%10
-    mode2 = (instructions[position]// 1000)%10
-    mode3 = (instructions[position]//10000)%10
+    mode1 = (instructions[ip]//  100)%10
+    mode2 = (instructions[ip]// 1000)%10
+    mode3 = (instructions[ip]//10000)%10
 
     #print(instructions)
-    #print(instructions[position], i, mode1, mode2, mode3)
+    #print(instructions[ip], i, mode1, mode2, mode3)
 
     if(i==1):
-        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+        a = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        b = instructions[ip+2] if mode2 else instructions[instructions[ip+2]]
         
-        instructions[instructions[position+3]] = a+b
+        instructions[instructions[ip+3]] = a+b
 
-        position += 4
+        ip += 4
     elif(i==2):
-        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+        a = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        b = instructions[ip+2] if mode2 else instructions[instructions[ip+2]]
 
-        instructions[instructions[position+3]] = a*b
+        instructions[instructions[ip+3]] = a*b
 
-        position += 4
+        ip += 4
     elif(i==3):
-        newPosition = instructions[position+1]
+        newPosition = instructions[ip+1]
         # take an input and store it at address given by parameter
         instructions[newPosition] = storage[amplifierStage][inputOccurrence]
         inputOccurrence+=1
-        position += 2
+        ip += 2
     elif(i==4):
         # outputs the value of its only parameter
-        storage[amplifierStage+1][1] = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        position += 2
+        storage[amplifierStage+1][1] = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        ip += 2
     elif(i==5):
         # jump if true
-        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+        a = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        b = instructions[ip+2] if mode2 else instructions[instructions[ip+2]]
         if (a != 0):
-            position = b
+            ip = b
         else:
-            position += 3
+            ip += 3
     elif(i==6):
         # jump if false
-        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+        a = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        b = instructions[ip+2] if mode2 else instructions[instructions[ip+2]]
         if (a == 0):
-            position = b
+            ip = b
         else:
-            position += 3
+            ip += 3
     elif(i==7):
         # less than
-        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+        a = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        b = instructions[ip+2] if mode2 else instructions[instructions[ip+2]]
 
         if (mode3):
-            instructions[position+3] = int(a<b)
+            instructions[ip+3] = int(a<b)
         else:
-            instructions[instructions[position+3]] = int(a<b)
+            instructions[instructions[ip+3]] = int(a<b)
 
-        position+=4
+        ip+=4
     elif(i==8):
         # equals
-        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+        a = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        b = instructions[ip+2] if mode2 else instructions[instructions[ip+2]]
 
         if (mode3):
-            instructions[position+3] = int(a==b)
+            instructions[ip+3] = int(a==b)
         else:
-            instructions[instructions[position+3]] = int(a==b)
+            instructions[instructions[ip+3]] = int(a==b)
 
-        position+=4
+        ip+=4
     else:
         print("ERROR")
 
