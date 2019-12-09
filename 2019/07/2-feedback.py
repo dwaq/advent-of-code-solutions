@@ -76,9 +76,12 @@ while(instructions[amp][ip[amp]] != 99):
     elif(i==4):
         # outputs the value of its only parameter
         # store the output to the next amp (using modulo to feed back the last amp to the first)
+        nextAmp = (amp+1)%5
         # append it to the end
-        storage[(amp+1)%5].append(instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]])
+        storage[nextAmp].append(instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]])
         ip[amp] += 2
+        # move to next amp
+        amp = nextAmp
     elif(i==5):
         # jump if true
         a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
