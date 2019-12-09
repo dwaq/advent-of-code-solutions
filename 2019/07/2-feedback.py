@@ -2,8 +2,16 @@ from itertools import permutations
 
 # storage for the 5x stages
 # index 0 of array is the phase setting (5-9, each used once)
-# then grow the array for each output
-storage = [ [9],[8],[7],[6],[5] ]
+# index 1 of array is previous amp's output
+# following this solution: https://www.reddit.com/r/adventofcode/comments/e7eezs/day_7_part_2_implementation_struggles/f9yk4c5/
+# on second round, machine A produces 119 when it should get 115
+# seems like there's some other bug in my code that is causing this
+storage = [ [5,0],
+            [6,0],
+            [7,0],
+            [8,0],
+            [9,0]
+        ]
 '''
 # store the highest signal that is seen
 highestSignal = 0
@@ -38,11 +46,15 @@ for i in range(5):
 # each amp has its own instruction position
 ip = [0,0,0,0,0]
 
+# multiple input instructions per stage
+# each amplifier has its own input occurrence
+inputOccurrence = [0,0,0,0,0]
+
 # end at 99
 while(instructions[amp][ip[amp]] != 99):
     # current op code (lowest 2 digits)
     i = instructions[amp][ip[amp]]%100
-    
+
     # get mode of each parameter
     # // does floor division (no floats)
     # %10 only gets that digit
@@ -68,17 +80,23 @@ while(instructions[amp][ip[amp]] != 99):
 
         ip[amp] += 4
     elif(i==3):
+        print(amp, ip[amp], storage[amp][0 if inputOccurrence[amp]==0 else 1])
+        #print(amp, 0 if inputOccurrence[amp]==0 else 1)
         newPosition = instructions[amp][ip[amp]+1]
         # take an input and store it at address given by parameter
-        # get the last element
-        instructions[amp][newPosition] = storage[amp][-1]
+        inputData = storage[amp][0 if inputOccurrence[amp]==0 else 1]
+        #print(amp, inputData, inputOccurrence[amp])
+        instructions[amp][newPosition] = inputData
+        inputOccurrence[amp]+=1
         ip[amp] += 2
     elif(i==4):
         # outputs the value of its only parameter
         # store the output to the next amp (using modulo to feed back the last amp to the first)
         nextAmp = (amp+1)%5
-        # append it to the end
-        storage[nextAmp].append(instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]])
+        #print(amp, nextAmp)
+        # set the next amp's input to this one's output 
+        storage[nextAmp][1] = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
+        print(amp, ip[amp], storage[nextAmp][1], instructions[amp])
         ip[amp] += 2
         # move to next amp
         amp = nextAmp
@@ -132,3 +150,5 @@ while(instructions[amp][ip[amp]] != 99):
 
 print("Highest Signal:", highestSignal)
 '''
+
+print(amp, storage[amp][1])
