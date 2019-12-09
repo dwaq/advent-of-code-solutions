@@ -2,13 +2,8 @@ from itertools import permutations
 
 # storage for the 5x stages
 # index 0 of array is the phase setting (5-9, each used once)
-# index 1 of array is the previous amplifier's output signal
-storage = [ [9,0],
-            [8,0],
-            [7,0],
-            [6,0],
-            [5,0]
-        ]
+# then grow the array for each output
+storage = [ [9],[8],[7],[6],[5] ]
 '''
 # store the highest signal that is seen
 highestSignal = 0
@@ -43,10 +38,6 @@ for i in range(5):
 # each amp has its own instruction position
 ip = [0,0,0,0,0]
 
-# each amp has their own count of this
-# multiple input instructions per stage
-inputOccurrence = [0,0,0,0,0]
-
 # end at 99
 while(instructions[ip] != 99):
     # current op code (lowest 2 digits)
@@ -79,12 +70,14 @@ while(instructions[ip] != 99):
     elif(i==3):
         newPosition = instructions[ip+1]
         # take an input and store it at address given by parameter
-        instructions[newPosition] = storage[amp][inputOccurrence]
-        inputOccurrence+=1
+        # get the last element
+        instructions[newPosition] = storage[amp][-1]
         ip += 2
     elif(i==4):
         # outputs the value of its only parameter
-        storage[amp+1][1] = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        # store the output to the next amp (using modulo to feed back the last amp to the first)
+        # append it to the end
+        storage[(amp+1)%5].append(instructions[ip+1] if mode1 else instructions[instructions[ip+1]])
         ip += 2
     elif(i==5):
         # jump if true
