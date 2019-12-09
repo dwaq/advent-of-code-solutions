@@ -22,7 +22,7 @@ for possibility in possibilities:
 
     #calculate the output from that phase setting
     # there's 5x stages
-    for amplifierStage in range(5):
+    for amp in range(5):
         '''
 # amplifier instructions (reset for each loop)
 intcode = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5"
@@ -70,12 +70,12 @@ while(instructions[ip] != 99):
     elif(i==3):
         newPosition = instructions[ip+1]
         # take an input and store it at address given by parameter
-        instructions[newPosition] = storage[amplifierStage][inputOccurrence]
+        instructions[newPosition] = storage[amp][inputOccurrence]
         inputOccurrence+=1
         ip += 2
     elif(i==4):
         # outputs the value of its only parameter
-        storage[amplifierStage+1][1] = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
+        storage[amp+1][1] = instructions[ip+1] if mode1 else instructions[instructions[ip+1]]
         ip += 2
     elif(i==5):
         # jump if true
