@@ -15,25 +15,48 @@ size = wide * tall
 layers = []
 
 # there's multiple layers in the image data
-numberOfLayers = len(imageData)/size
+numberOfLayers = int(len(imageData)/size)
 
 # for each layer, appens its data
-for n in range(int(numberOfLayers)):
+for n in range(numberOfLayers):
     # start of those pixels to the end
     layers.append(imageData[n*size:(n+1)*size])
+    # convert strings to list of chars
+    layers[n] = list(layers[n])
 
 #print(layers)
 
-# store each layers data here 
-data = {}
+# colors
+black = '0'
+white = '1'
+transparent = '2'
 
-# for each layer
-for l in layers:
-    # key is the number of 0's
-    # value is the number of 1's times the numbers of 2's
-    data[l.count('0')] = (l.count('1')*l.count('2'))
+# first layer in front, last layer in back
 
-#print(data)
+# output starts as first layer
+output = layers[0]
+#print(output)
 
-# print the value with the lowest key
-print(data[min(data)])
+# for each layer, build onto the previous one
+for layer in layers:
+    for index, pixel in enumerate(layer):
+        # if pixel is transparent
+        if(output[index] == transparent):
+            # set it to the pixel underneath it
+            output[index] = layer[index]
+
+#print(output)
+
+# format into image
+p = 0
+while (p < size):
+    # add a newline at the end of the row
+    if (p%wide == 0):
+        print()
+    # otherwise just keep on printing
+    # 0 = space; 1 = *
+    if (output[p] == white):
+        print('*', end =" ")
+    else:
+        print(' ', end =" ")
+    p=p+1
