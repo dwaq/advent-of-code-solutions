@@ -40,12 +40,13 @@ for line in wholeMap:
 
 #printMap(m)
 
-# store each asteroids distances in a dict
-d = {}
+# store each asteroids degrees & distances in a dict
+degrees = {}
+distance = {}
 
 # from before:
 # Best Location: (11, 13)
-x, y, = 8, 3
+x, y, = 11,13
 # Number detected: 210
 
 # loop through each point and calculate the angle
@@ -72,23 +73,105 @@ for dy in range(len(m)):
             #print("Asteroid found:", (dx,dy), theta_radians)
 
             # store that angle at the point (for display purposes)
-            m[dy][dx] = round(theta_degrees,1)
+            #m[dy][dx] = round(theta_degrees,1)
+
+            # calculate distance away
+            dist = math.sqrt((dx - x)**2 + (dy - y)**2)  
+
+            #m[dy][dx] = round(dist,1)
 
             # store in dict to sort later
-            d[(dx,dy)] = theta_degrees
+            degrees[(dx,dy)] = theta_degrees
+            distance[(dx,dy)] = dist
 
-        # for display purposes only
-        else:
-            m[dy][dx] = '...'
+#printMap(m)
 
 # sort all asteroids based on angle
-sortedList = {k: v for k, v in sorted(d.items(), key=lambda item: item[1])}
+sortedKeys = list({k: v for k, v in sorted(degrees.items(), key=lambda item: item[1])})
+
+#print(sortedKeys)
+
+numberVaporized=0
+
+# keep track of when multiple angles are the same
+sameAngleStorage = 370
+
+# reset that counter when we make a full rotation
+lastAngle = 370
+
+# loop through list and vaporize some asteroids
+for i, key in enumerate(sortedKeys):
+    #print(i)
+    try:
+        # reset the angle storage after a full rotation
+        if (degrees[sortedKeys[i]] < lastAngle):
+            sameAngleStorage = 370
+    # key has been erased
+    except KeyError:
+        continue
+    lastAngle = degrees[sortedKeys[i]]
+
+    #print(i, degrees[sortedKeys[i]], distance[sortedKeys[i]])
+
+    # stop checking if we've already dealt with this angle
+    if (degrees[sortedKeys[i]] == sameAngleStorage):
+        #print("Saw already:", key, degrees[sortedKeys[i]])
+        continue
+    # else store angle to skip it next time
+    else:
+        #print("Didn't see:", key, degrees[sortedKeys[i]])
+        sameAngleStorage = degrees[sortedKeys[i]]
+
+    # if angle is the same, choose the lowest distance one
+    # then skip that angle until the next revolution
+
+    try:    # so you don't pass the end of the list
+        # if the angle is the same as next
+        if (degrees[sortedKeys[i+1]] == degrees[sortedKeys[i]]):
+            # get all points that have that angle
+            points = []
+            for point, angle in degrees.items():
+                if angle == degrees[sortedKeys[i]]:
+                    points.append(point)
+
+            #print("Same points:", points)
+
+            # get the point that has the shortest distance
+            minDistance = 100000
+            minDistPoint = (0,0)
+            for point in points:
+                #print(point, distance[point])
+                if (distance[point] < minDistance):
+                    minDistance = distance[point]
+                    minDistPoint = point
+
+            #print("Minimum distance point:", minDistPoint)
+            
+            # vaporize the closest one
+            numberVaporized+=1
+            m[minDistPoint[1]][minDistPoint[0]] = numberVaporized
+
+            print(numberVaporized, (minDistPoint[0],minDistPoint[1]))
+
+            # delete from degrees and distance so it can't be used again
+            del degrees[point]
+            del distance[point]
+
+            # then move to next one
+            continue
+
+    except IndexError:
+        pass
+    #print(i, d[key])
+
+    #if(i>12 and i<33):
+    #if(i<25):
+        # FYI, sortedKeys[i] == key
+        #print(i, degrees[key], distance[key])
+    numberVaporized+=1
+    m[key[1]][key[0]] = numberVaporized
+
+    print(numberVaporized, (key[0],key[1]))
 
 
-for i, key in enumerate(sortedList):
-    print(i, key, d[key])
-    if(i<10):
-        m[key[1]][key[0]] = i
-
-
-printMap(m)
+#printMap(m)
