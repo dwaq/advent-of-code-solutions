@@ -71,7 +71,14 @@ for dy in range(len(m)):
         else:
             m[dy][dx] = '...'
 
-#printMap(m)
+# sort all asteroids based on angle
+sortedList = {k: v for k, v in sorted(d.items(), key=lambda item: item[1])}
 
-for key, value in sorted(d.items(), key=lambda item: item[1]):
-    print("%s: %s" % (key, value))
+
+for i, key in enumerate(sortedList):
+    print(i, key, d[key])
+    if(i<10):
+        m[key[1]][key[0]] = i
+
+
+printMap(m)
