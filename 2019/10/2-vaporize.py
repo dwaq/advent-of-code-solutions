@@ -1,4 +1,4 @@
-from fractions import Fraction
+import math
 
 empty = '.'
 asteroid = '#'
@@ -33,90 +33,45 @@ for line in wholeMap:
 # store each asteroids distances in a dict
 d = {}
 
-# loop through the map to measure from each point
-for y in range(len(m)):
-    for x in range(len(m[0])):
-        # if we're on an asteroid
-        if (m[y][x] == asteroid):
+# from before:
+# Best Location: (11, 13)
+x, y, = 8, 3
+# Number detected: 210
 
-            # how many asteroids can we detect?
-            count = 0
+# loop through each point and calculate the angle
+for dy in range(len(m)):
+    for dx in range(len(m[0])):
+        # don't check the point we're on
+        if (x==dx and y==dy):
+            #print("we're home!")
+            continue
 
-            # loop through the remaining map and determine if we can see it
-            for dy in range(len(m)):
-                for dx in range(len(m[0])):
-                    # don't check the point we're on
-                    if (x==dx and y==dy):
-                        #print("we're home!")
-                        continue
+        # needs to be an asteroid there
+        if(m[dy][dx] == asteroid):
+            # calculate angle
+            delta_x = dx - x
+            delta_y = y - dy
 
-                    # needs to be an asteroid there
-                    if(m[dy][dx] == asteroid):
-                        #print("Asteroid found:", (dx,dy))
+            theta_radians = math.atan2(delta_x, delta_y)
+            theta_degrees = math.degrees(theta_radians)
 
-                        # check if something is in the slope of that line
-                        mx = abs(x-dx)
-                        my = abs(y-dy)
-                        #print(mx, my)
-                        
-                        # reduce to smallest numbers
-                        # slope of 8,6 -> 4,3
-                        try:
-                            frac = Fraction(mx, my)
-                            mx = abs(frac.numerator)
-                            my = abs(frac.denominator)
-                        # when one side is zero, the other side is a straight line
-                        # so reduce it to 1 to check every point in between
-                        except ZeroDivisionError:
-                            if(mx==0):
-                                my=1
-                            if(my==0):
-                                mx=1
+            # convert negative degrees to positive
+            if(theta_degrees < 0):
+                theta_degrees += 360
 
-                        #print("Slope:", (mx, my))
+            #print("Asteroid found:", (dx,dy), theta_radians)
 
-                        # check along the slope of the line
+            # store that angle at the point (for display purposes)
+            m[dy][dx] = round(theta_degrees,1)
 
-                        # test points starting at the asteroid we're checkind
-                        tx = dx
-                        ty = dy
+            # store in dict to sort later
+            d[(dx,dy)] = theta_degrees
 
-                        #print("Test point:", (tx,ty), (x,y))
+        # for display purposes only
+        else:
+            m[dy][dx] = '...'
 
-                        # loop until we get back home
-                        while (tx != x or ty != y):
-                            #print("Original:", (x,y), "Test:", (dx,dy))
-                            
-                            # test in the correct direction
-                            # if greater, reduce
-                            if (dx>x):
-                                tx-=mx
-                            # otherwise, increase
-                            else:
-                                tx+=mx
-                            
-                            if (dy>y):
-                                ty-=my
-                            else:
-                                ty+=my
+#printMap(m)
 
-                            #print("Test point:", (tx,ty))
-
-                            # if this location is an asteroid, it's blocking your view, so leave
-                            if(m[ty][tx] == asteroid):
-                                break
-
-                        # if we made it home without blocking, add to count
-                        if (tx == x and ty == y):
-                            count += 1
-
-                        #print(count, "\n")
-
-            # store asteroid counts to that location
-            #print("count:", count)
-            d[(x,y)] = count
-
-# the point with the largest value
-best = max(d, key=d.get)
-print("Best Location:", best)
-print("Number detected:", d[best])
+for key, value in sorted(d.items(), key=lambda item: item[1]):
+    print("%s: %s" % (key, value))
