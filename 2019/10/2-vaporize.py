@@ -15,7 +15,17 @@ asteroid = '#'
 # pretty print the map
 def printMap(m):
     for line in m:
-        print(line)
+        for l in line:
+            if(l=='.'):
+                l=' .'
+            elif(l=='#'):
+                l=' #'
+            elif(l=='X'):
+                l=' X'
+            elif(int(l) < 10):
+                l=' '+str(l)
+            print(l, end =" ")
+        print()
 
 wholeMap = open("map.txt", "r")
 
