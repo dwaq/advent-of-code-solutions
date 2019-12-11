@@ -6,11 +6,11 @@ from itertools import permutations
 # following this solution: https://www.reddit.com/r/adventofcode/comments/e7eezs/day_7_part_2_implementation_struggles/f9yk4c5/
 # on second round, machine A produces 119 when it should get 115
 # seems like there's some other bug in my code that is causing this
-storage = [ [5,0],
-            [6,0],
+storage = [ [9,0],
             [7,0],
             [8,0],
-            [9,0]
+            [5,0],
+            [6,0]
         ]
 '''
 # store the highest signal that is seen
@@ -28,7 +28,7 @@ for possibility in possibilities:
     for amp in range(5):
         '''
 # amplifier instructions (reset for each loop)
-intcode = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5"
+intcode = "3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10"
 
 listOfInstructions = intcode.split(",")
 
@@ -85,11 +85,12 @@ while(instructions[amp][ip[amp]] != 99):
 
         ip[amp] += 4
     elif(i==3):
-        print(amp, ip[amp], storage[amp][0 if inputOccurrence[amp]==0 else 1])
+        #print(amp, ip[amp], storage[amp][0 if inputOccurrence[amp]==0 else 1])
         #print(amp, 0 if inputOccurrence[amp]==0 else 1)
         # take an input and store it at address given by parameter
         inputData = storage[amp][0 if inputOccurrence[amp]==0 else 1]
         #print(amp, inputData, inputOccurrence[amp])
+        #print(mode1, instructions[amp][ip[amp]+1], instructions[amp][instructions[amp][ip[amp]+1]], a)
         instructions[amp][instructions[amp][ip[amp]+1]] = inputData
         inputOccurrence[amp]+=1
         ip[amp] += 2
@@ -100,7 +101,7 @@ while(instructions[amp][ip[amp]] != 99):
         #print(amp, nextAmp)
         # set the next amp's input to this one's output 
         storage[nextAmp][1] = a
-        print(amp, ip[amp], storage[nextAmp][1], instructions[amp])
+        #print(amp, ip[amp], storage[nextAmp][1], instructions[amp])
         ip[amp] += 2
         # move to next amp
         amp = nextAmp
@@ -118,6 +119,7 @@ while(instructions[amp][ip[amp]] != 99):
             ip[amp] += 3
     elif(i==7):
         # less than
+        #print("7", mode3)
         if (mode3):
             instructions[amp][ip[amp]+3] = int(a<b)
         else:
@@ -126,6 +128,7 @@ while(instructions[amp][ip[amp]] != 99):
         ip[amp]+=4
     elif(i==8):
         # equals
+        #print("8", mode3)
         if (mode3):
             instructions[amp][ip[amp]+3] = int(a==b)
         else:
@@ -134,6 +137,7 @@ while(instructions[amp][ip[amp]] != 99):
         ip[amp]+=4
     else:
         print("ERROR")
+        break
 
 '''
     # store the highest signal from all of the permutations
