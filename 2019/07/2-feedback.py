@@ -86,11 +86,10 @@ while(instructions[amp][ip[amp]] != 99):
     elif(i==3):
         print(amp, ip[amp], storage[amp][0 if inputOccurrence[amp]==0 else 1])
         #print(amp, 0 if inputOccurrence[amp]==0 else 1)
-        newPosition = instructions[amp][ip[amp]+1]
         # take an input and store it at address given by parameter
         inputData = storage[amp][0 if inputOccurrence[amp]==0 else 1]
         #print(amp, inputData, inputOccurrence[amp])
-        instructions[amp][newPosition] = inputData
+        instructions[amp][a] = inputData
         inputOccurrence[amp]+=1
         ip[amp] += 2
     elif(i==4):
