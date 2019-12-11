@@ -62,20 +62,24 @@ while(instructions[amp][ip[amp]] != 99):
     mode2 = (instructions[amp][ip[amp]]// 1000)%10
     mode3 = (instructions[amp][ip[amp]]//10000)%10
 
+    try:
+        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
+    except IndexError:
+        pass
+
+    try:
+        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
+    except IndexError:
+        pass
+
     #print(instructions[amp])
     #print(instructions[amp][ip[amp]], i, mode1, mode2, mode3)
 
     if(i==1):
-        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
-        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
-        
         instructions[amp][instructions[amp][ip[amp]+3]] = a+b
 
         ip[amp] += 4
     elif(i==2):
-        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
-        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
-
         instructions[amp][instructions[amp][ip[amp]+3]] = a*b
 
         ip[amp] += 4
@@ -95,32 +99,25 @@ while(instructions[amp][ip[amp]] != 99):
         nextAmp = (amp+1)%5
         #print(amp, nextAmp)
         # set the next amp's input to this one's output 
-        storage[nextAmp][1] = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
+        storage[nextAmp][1] = a
         print(amp, ip[amp], storage[nextAmp][1], instructions[amp])
         ip[amp] += 2
         # move to next amp
         amp = nextAmp
     elif(i==5):
         # jump if true
-        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
-        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
         if (a != 0):
             ip[amp] = b
         else:
             ip[amp] += 3
     elif(i==6):
         # jump if false
-        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
-        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
         if (a == 0):
             ip[amp] = b
         else:
             ip[amp] += 3
     elif(i==7):
         # less than
-        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
-        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
-
         if (mode3):
             instructions[amp][ip[amp]+3] = int(a<b)
         else:
@@ -129,9 +126,6 @@ while(instructions[amp][ip[amp]] != 99):
         ip[amp]+=4
     elif(i==8):
         # equals
-        a = instructions[amp][ip[amp]+1] if mode1 else instructions[amp][instructions[amp][ip[amp]+1]]
-        b = instructions[amp][ip[amp]+2] if mode2 else instructions[amp][instructions[amp][ip[amp]+2]]
-
         if (mode3):
             instructions[amp][ip[amp]+3] = int(a==b)
         else:
