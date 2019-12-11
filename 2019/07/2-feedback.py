@@ -41,7 +41,8 @@ amp = 0
 # each amp has its own instructions
 instructions = [0,0,0,0,0]
 for i in range(5):
-    instructions[i] = listOfInstructions
+    # copy content of list instead of reference to it
+    instructions[i] = listOfInstructions[:]
 
 # each amp has its own instruction position
 ip = [0,0,0,0,0]
