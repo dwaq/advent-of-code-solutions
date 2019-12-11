@@ -89,7 +89,7 @@ while(instructions[amp][ip[amp]] != 99):
         # take an input and store it at address given by parameter
         inputData = storage[amp][0 if inputOccurrence[amp]==0 else 1]
         #print(amp, inputData, inputOccurrence[amp])
-        instructions[amp][a] = inputData
+        instructions[amp][instructions[amp][ip[amp]+1]] = inputData
         inputOccurrence[amp]+=1
         ip[amp] += 2
     elif(i==4):
