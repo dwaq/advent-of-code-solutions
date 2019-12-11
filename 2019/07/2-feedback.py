@@ -20,8 +20,8 @@ highestSignal = 0
 possibilities = set(permutations(range(5), 5))
 for possibility in possibilities:
     # fill the storage array with that permutation
-    for i, p in enumerate(possibility):
-        storage[i] = [p, 0]
+    for op, p in enumerate(possibility):
+        storage[op] = [p, 0]
 
     #calculate the output from that phase setting
     # there's 5x stages
@@ -40,9 +40,9 @@ amp = 0
 
 # each amp has its own instructions
 instructions = [0,0,0,0,0]
-for i in range(5):
+for op in range(5):
     # copy content of list instead of reference to it
-    instructions[i] = listOfInstructions[:]
+    instructions[op] = listOfInstructions[:]
 
 # each amp has its own instruction position
 ip = [0,0,0,0,0]
@@ -54,7 +54,7 @@ inputOccurrence = [0,0,0,0,0]
 # end at 99
 while(instructions[amp][ip[amp]] != 99):
     # current op code (lowest 2 digits)
-    i = instructions[amp][ip[amp]]%100
+    op = instructions[amp][ip[amp]]%100
 
     # get mode of each parameter
     # // does floor division (no floats)
@@ -74,17 +74,17 @@ while(instructions[amp][ip[amp]] != 99):
         pass
 
     #print(instructions[amp])
-    #print(instructions[amp][ip[amp]], i, mode1, mode2, mode3)
+    #print(instructions[amp][ip[amp]], op, mode1, mode2, mode3)
 
-    if(i==1):
+    if(op==1):
         instructions[amp][instructions[amp][ip[amp]+3]] = a+b
 
         ip[amp] += 4
-    elif(i==2):
+    elif(op==2):
         instructions[amp][instructions[amp][ip[amp]+3]] = a*b
 
         ip[amp] += 4
-    elif(i==3):
+    elif(op==3):
         #print(amp, ip[amp], storage[amp][0 if inputOccurrence[amp]==0 else 1])
         #print(amp, 0 if inputOccurrence[amp]==0 else 1)
         # take an input and store it at address given by parameter
@@ -94,7 +94,7 @@ while(instructions[amp][ip[amp]] != 99):
         instructions[amp][instructions[amp][ip[amp]+1]] = inputData
         inputOccurrence[amp]+=1
         ip[amp] += 2
-    elif(i==4):
+    elif(op==4):
         # outputs the value of its only parameter
         # store the output to the next amp (using modulo to feed back the last amp to the first)
         nextAmp = (amp+1)%5
@@ -105,19 +105,19 @@ while(instructions[amp][ip[amp]] != 99):
         ip[amp] += 2
         # move to next amp
         amp = nextAmp
-    elif(i==5):
+    elif(op==5):
         # jump if true
         if (a != 0):
             ip[amp] = b
         else:
             ip[amp] += 3
-    elif(i==6):
+    elif(op==6):
         # jump if false
         if (a == 0):
             ip[amp] = b
         else:
             ip[amp] += 3
-    elif(i==7):
+    elif(op==7):
         # less than
         #print("7", mode3)
         if (mode3):
@@ -126,7 +126,7 @@ while(instructions[amp][ip[amp]] != 99):
             instructions[amp][instructions[amp][ip[amp]+3]] = int(a<b)
 
         ip[amp]+=4
-    elif(i==8):
+    elif(op==8):
         # equals
         #print("8", mode3)
         if (mode3):
