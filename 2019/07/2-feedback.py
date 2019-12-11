@@ -12,10 +12,10 @@ storage = [ [9,0],
             [5,0],
             [6,0]
         ]
-'''
+
 # store the highest signal that is seen
 highestSignal = 0
-
+'''
 # get every permutation of the phase setting
 possibilities = set(permutations(range(5), 5))
 for possibility in possibilities:
@@ -139,14 +139,11 @@ while(instructions[amp][ip[amp]] != 99):
         print("ERROR")
         break
 
-'''
-    # store the highest signal from all of the permutations
-    if (storage[5][1] > highestSignal):
-        highestSignal = storage[5][1]
+
+# store the highest signal from all of the permutations
+if (storage[amp][1] > highestSignal):
+    highestSignal = storage[amp][1]
 
     #print("Phase Setting:", possibility, "Output Signal:", storage[5][1])
 
 print("Highest Signal:", highestSignal)
-'''
-
-print(amp, storage[amp][1])
