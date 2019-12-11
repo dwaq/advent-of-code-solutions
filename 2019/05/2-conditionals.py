@@ -41,8 +41,15 @@ while(instructions[position] != 99):
     mode2 = (instructions[position]// 1000)%10
     mode3 = (instructions[position]//10000)%10
 
-    a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-    b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+    try:
+        a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
+    except IndexError:
+        pass
+
+    try:
+        b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+    except IndexError:
+        pass
 
     #print(instructions)
     #print(instructions[position], i, mode1, mode2, mode3)
