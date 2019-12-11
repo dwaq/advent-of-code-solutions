@@ -50,54 +50,50 @@ for possibility in possibilities:
             mode2 = (instructions[position]// 1000)%10
             mode3 = (instructions[position]//10000)%10
 
+            try:
+                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
+            except IndexError:
+                pass
+
+            try:
+                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
+            except IndexError:
+                pass
+
             #print(instructions)
             #print(instructions[position], i, mode1, mode2, mode3)
 
             if(i==1):
-                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
-                
                 instructions[instructions[position+3]] = a+b
 
                 position += 4
             elif(i==2):
-                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
-
                 instructions[instructions[position+3]] = a*b
 
                 position += 4
             elif(i==3):
-                newPosition = instructions[position+1]
                 # take an input and store it at address given by parameter
-                instructions[newPosition] = storage[amplifierStage][inputOccurrence]
+                instructions[instructions[position+1]] = storage[amplifierStage][inputOccurrence]
                 inputOccurrence+=1
                 position += 2
             elif(i==4):
                 # outputs the value of its only parameter
-                storage[amplifierStage+1][1] = instructions[position+1] if mode1 else instructions[instructions[position+1]]
+                storage[amplifierStage+1][1] = a
                 position += 2
             elif(i==5):
                 # jump if true
-                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
                 if (a != 0):
                     position = b
                 else:
                     position += 3
             elif(i==6):
                 # jump if false
-                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
                 if (a == 0):
                     position = b
                 else:
                     position += 3
             elif(i==7):
                 # less than
-                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
-
                 if (mode3):
                     instructions[position+3] = int(a<b)
                 else:
@@ -106,9 +102,6 @@ for possibility in possibilities:
                 position+=4
             elif(i==8):
                 # equals
-                a = instructions[position+1] if mode1 else instructions[instructions[position+1]]
-                b = instructions[position+2] if mode2 else instructions[instructions[position+2]]
-
                 if (mode3):
                     instructions[position+3] = int(a==b)
                 else:
