@@ -23,3 +23,14 @@ for line in inputText:
 
 print(position)
 print(velocity)
+# first apply gravity
+# consider each pair
+# each axis's velocity changes by 1 based on positions
+# >  -> +1
+# <  -> -1
+# == -> 0
+
+# then apply velocity
+# add the velocity of each moon to its position
+
+
