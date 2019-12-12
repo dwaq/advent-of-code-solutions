@@ -21,8 +21,9 @@ for line in inputText:
     # each position also has a velocity starting at 0
     velocity.append([0,0,0])
 
-print(position)
-print(velocity)
+#print(position)
+#print(velocity)
+
 # first apply gravity
 # consider each pair
 # each axis's velocity changes by 1 based on positions
@@ -34,3 +35,9 @@ print(velocity)
 # add the velocity of each moon to its position
 
 
+# pretty print the data
+print("After {} steps:".format(0))
+for x in range(len(position)):
+    print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
+        position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
+print()
