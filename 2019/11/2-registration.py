@@ -9,16 +9,19 @@ hull = [[empty for i in range(size)] for j in range(size)]
 
 # pretty print the hull
 def printHull(m):
-    for line in m:
-        for l in line:
-            if(l==empty):
-                l=' '
-            elif(l==black):
-                l='.'
-            elif(l==white):
-                l='#'
-            print(l, end =" ")
-        print()
+    # print it backwards because image is mirrored for some reason
+    for line in reversed(m):
+        # if the line has more than 1 element (not blank), then print it
+        if (line.count(line[0]) != len(line)):
+            for l in line:
+                if(l==empty):
+                    l=' '
+                elif(l==black):
+                    l=' '
+                elif(l==white):
+                    l='#'
+                print(l, end =" ")
+            print()
 
 # count number of panels that were painted
 # AKA not empty
@@ -31,7 +34,7 @@ def countHull(m):
     return paintedPanels
 
 # starting position (in the middle, //= not a float)
-px = size//2
+px = 0
 py = size//2
 
 # direction the robot is facing (starts up)
@@ -248,4 +251,5 @@ while(instructions[ip] != 99):
 #print("Relative Base:", relativeBase)
 #print("Output Value:", outputValue)
 
-print("Painted panels:", countHull(hull))
+#print("Painted panels:", countHull(hull))
+printHull(hull)
