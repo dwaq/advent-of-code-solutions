@@ -37,8 +37,8 @@ py = size//2
 # direction the robot is facing (starts up)
 d = "U"
 
-# start on a black panel
-hull[py][px] = black
+# start on a white panel
+hull[py][px] = white
 
 # returns the color of the panel we're on
 def getPanelColor():
