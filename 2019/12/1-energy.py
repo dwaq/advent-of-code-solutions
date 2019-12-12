@@ -1,3 +1,5 @@
+import itertools
+
 inputText = open("positions.txt", "r")
 
 position = []
@@ -24,20 +26,43 @@ for line in inputText:
 #print(position)
 #print(velocity)
 
-# first apply gravity
-# consider each pair
-# each axis's velocity changes by 1 based on positions
-# >  -> +1
-# <  -> -1
-# == -> 0
-
-# then apply velocity
-# add the velocity of each moon to its position
-
-
-# pretty print the data
+''' pretty print the starting data '''
 print("After {} steps:".format(0))
 for x in range(len(position)):
     print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
         position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
 print()
+
+for step in range(10):
+    ''' first apply gravity '''
+    # consider each pair
+    # get every permutation of the phase setting
+    possibilities = itertools.permutations(range(len(position)), 2)
+    for p in possibilities:
+        # p is a tuple in format (1st position, 2nd position)
+        #print(p, p[0], p[1])
+
+        # each axis's velocity changes by 1 based on positions
+        # go through x, y, and z
+        for a in range(3):
+            # if lower, increase velocity
+            if (position[p[0]][a] < position[p[1]][a]):
+                velocity[p[0]][a] += 1
+            # if higher, decrease velocity
+            elif (position[p[0]][a] > position[p[1]][a]):
+                velocity[p[0]][a] -= 1
+            # if the same, don't change
+
+    ''' then apply velocity '''
+    # add the velocity of each moon to its position
+    for p in range(len(position)):
+        # go through x, y, and z
+        for a in range(3):
+            position[p][a] += velocity[p][a]
+
+    ''' pretty print the data '''
+    print("After {} steps:".format(step+1))
+    for x in range(len(position)):
+        print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
+            position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
+    print()
