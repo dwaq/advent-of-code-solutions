@@ -4,7 +4,7 @@ black = 0
 white = 1
 
 # create the hull array, filling it with None
-size = 1500
+size = 90
 hull = [[empty for i in range(size)] for j in range(size)]
 
 # pretty print the hull
