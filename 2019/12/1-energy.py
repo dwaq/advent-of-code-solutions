@@ -66,3 +66,21 @@ for step in range(10):
         print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
             position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
     print()
+
+''' calculate the total energy in the system '''
+totalEnergy = 0
+
+for moon in range(len(position)):
+    potentialEnergy = 0
+    kineticEnergy = 0
+    # go through x, y, and z
+    for a in range(3):
+        # potential energy is absolute value sum of positions
+        potentialEnergy += abs(position[moon][a])
+        # kinetic energy is the absolute value sum of velocity
+        kineticEnergy += abs(velocity[moon][a])
+
+    # energy of moon is potential energy times kinetic energy
+    totalEnergy += (potentialEnergy * kineticEnergy)
+
+print("Total energy:", totalEnergy)
