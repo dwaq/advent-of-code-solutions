@@ -33,7 +33,7 @@ for x in range(len(position)):
         position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
 print()
 
-for step in range(10):
+for step in range(1000):
     ''' first apply gravity '''
     # consider each pair
     # get every permutation of the phase setting
