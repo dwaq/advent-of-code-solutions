@@ -1,14 +1,16 @@
-# colors
-empty = None
-black = 0
-white = 1
+# tiles
+empty = 0
+wall = 1
+block = 2
+paddle = 3
+ball = 4
 
-# create the hull array, filling it with None
+# create the screen array, filling it with empty (not needed)
 size = 1500
-hull = [[empty for i in range(size)] for j in range(size)]
+screen = [[empty for i in range(size)] for j in range(size)]
 
-# pretty print the hull
-def printHull(m):
+# pretty print the screen
+def printScreen(m):
     for line in m:
         for l in line:
             if(l==empty):
@@ -20,84 +22,44 @@ def printHull(m):
             print(l, end =" ")
         print()
 
-# count number of panels that were painted
+# count number of pixels that were set as a block
 # AKA not empty
-def countHull(m):
-    paintedPanels = 0
+def countScreen(m):
+    paintedPixels = 0
     for line in m:
         for l in line:
-            if(l!=empty):
-                paintedPanels+=1
-    return paintedPanels
+            if(l==block):
+                paintedPixels+=1
+    return paintedPixels
 
-# starting position (in the middle, //= not a float)
-px = size//2
-py = size//2
-
-# direction the robot is facing (starts up)
-d = "U"
-
-# start on a black panel
-hull[py][px] = black
-
-# returns the color of the panel we're on
-def getPanelColor():
-    # only white if it's actually been painted white
-    if (hull[py][px] == white):
-        return white
-    # otherwise it's painted black
-    # (which could technically be empty or black)
-    else:
-        return black
+# postions
+px = None
+py = None
 
 # every other output does a different task
 # so count each to understand where to go
 outputCounter = 0
 
-# paint the current block the correct color
-# rotate then move
-def paintAndMoveRobot(value):
+# set the x and y position and the tile
+def drawScreen(value):
     # use global values
-    global outputCounter, py, px, d
+    global outputCounter, py, px
 
-    # even numbers paint
-    if (outputCounter%2 == 0):
-        hull[py][px] = value
-    
-    # odd numbers move
+    # three inputs to an instruction
+    sequence = outputCounter % 3
+
+    # first is x position
+    if (sequence == 0):
+        px = value
+    # second is y position
+    elif (sequence == 1):
+        py = value
+    # third is tile
+    elif (sequence == 2):
+        screen[py][px] = value
     else:
-        # left 90 degrees
-        if (value == 0):
-            if (d=="U"):
-                d="L"
-                px -= 1
-            elif (d=="L"):
-                d="D"
-                py -= 1
-            elif (d=="D"):
-                d="R"
-                px += 1
-            elif (d=="R"):
-                d="U"
-                py += 1
-            else:
-                print("Issue with left turn")
-        # right 90 degrees
-        else:
-            if (d=="U"):
-                d="R"
-                px += 1
-            elif (d=="R"):
-                d="D"
-                py -= 1
-            elif (d=="D"):
-                d="L"
-                px -= 1
-            elif (d=="L"):
-                d="U"
-                py += 1
-            else:
-                print("Issue with right turn")
+        print("Issue with sequence")
+
     outputCounter += 1
 
 # relative base
@@ -201,6 +163,8 @@ while(instructions[ip] != 99):
 
         ip += 4
     elif(i==3):
+        print("input")
+        '''
         # take an input and store it at address given by parameter
         if (mode1 == 0):
             instructions[instructions[ip+1]] = getPanelColor()
@@ -209,10 +173,11 @@ while(instructions[ip] != 99):
         elif (mode1 == 2):
             instructions[instructions[ip+1]+relativeBase] = getPanelColor()
         ip += 2
+        '''
     elif(i==4):
         # outputs the value of its only parameter
         #outputValue = a
-        paintAndMoveRobot(a)
+        drawScreen(a)
         #print("Output at", ip, "is", a)
         ip += 2
     elif(i==5):
@@ -248,4 +213,4 @@ while(instructions[ip] != 99):
 #print("Relative Base:", relativeBase)
 #print("Output Value:", outputValue)
 
-print("Painted panels:", countHull(hull))
+print("Block tiles:", countScreen(screen))
