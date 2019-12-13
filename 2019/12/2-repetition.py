@@ -40,7 +40,7 @@ while(True):
     ''' first apply gravity '''
     # consider each pair
     # get every permutation of the phase setting
-    possibilities = itertools.permutations(range(len(position)), 2)
+    possibilities = itertools.permutations(range(4), 2)
     for p in possibilities:
         # p is a tuple in format (1st position, 2nd position)
         #print(p, p[0], p[1])
@@ -58,7 +58,7 @@ while(True):
 
     ''' then apply velocity '''
     # add the velocity of each moon to its position
-    for p in range(len(position)):
+    for p in range(4):
         # go through x, y, and z
         for a in range(3):
             position[p][a] += velocity[p][a]
@@ -78,7 +78,7 @@ while(True):
 
     # has this happened before?
     if (thisHash in hashes):
-        print('Occurred at:', len(hashes)-1)
+        print('Occurred at:', len(hashes))
         break
     # otherwise add to the list
     else:
