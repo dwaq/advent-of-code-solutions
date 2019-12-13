@@ -4,6 +4,7 @@ inputText = open("positions.txt", "r")
 
 position = []
 velocity = []
+hashes = []
 
 for line in inputText:
     # remove extra characters
@@ -27,13 +28,15 @@ for line in inputText:
 #print(velocity)
 
 ''' pretty print the starting data '''
+'''
 print("After {} steps:".format(0))
 for x in range(len(position)):
     print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
         position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
 print()
+'''
 
-for step in range(1000):
+while(True):
     ''' first apply gravity '''
     # consider each pair
     # get every permutation of the phase setting
@@ -61,13 +64,28 @@ for step in range(1000):
             position[p][a] += velocity[p][a]
 
     ''' pretty print the data '''
+    '''
     print("After {} steps:".format(step+1))
     for x in range(len(position)):
         print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
             position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
     print()
+    '''
+
+    ''' Find when all of the moons' positions and velocities exactly match a previous point in time. '''
+    # hash the data
+    thisHash = hash(str(position) + str(velocity))
+
+    # has this happened before?
+    if (thisHash in hashes):
+        print('Occurred at:', len(hashes)-1)
+        break
+    # otherwise add to the list
+    else:
+        hashes.append(thisHash)
 
 ''' calculate the total energy in the system '''
+'''
 totalEnergy = 0
 
 for moon in range(len(position)):
@@ -84,3 +102,4 @@ for moon in range(len(position)):
     totalEnergy += (potentialEnergy * kineticEnergy)
 
 print("Total energy:", totalEnergy)
+'''
