@@ -1,4 +1,4 @@
-import msvcrt
+import time
 
 # tiles
 empty = 0
@@ -47,6 +47,16 @@ def countScreen(m):
                 paintedPixels+=1
     return paintedPixels
 
+# returns position of 'search' in 2D array 'data'
+# https://stackoverflow.com/a/45163106/7564623
+def index_2d(data, search):
+    for i, e in enumerate(data):
+        try:
+            return i, e.index(search)
+        except ValueError:
+            pass
+    raise ValueError("{} is not in list".format(repr(search)))
+
 # postions
 px = None
 py = None
@@ -61,7 +71,7 @@ score = 0
 # set the x and y position and the tile
 def drawScreen(value):
     # use global values
-    global outputCounter, py, px
+    global outputCounter, py, px, score
 
     # three inputs to an instruction
     sequence = outputCounter % 3
@@ -186,20 +196,26 @@ while(instructions[ip] != 99):
 
         ip += 4
     elif(i==3):
-        printScreen(screen)
-        # gets one unicode character from input
-        direction = msvcrt.getwch()
-        # standard gaming inputs (asd)
-        if (direction == "a"):
-            direction = left
-        elif (direction == "d"):
+        #printScreen(screen)
+
+        # position of ball
+        (pb_y, pb_x) = index_2d(screen, ball)
+
+        # position of paddle
+        (pp_y, pp_x) = index_2d(screen, paddle)
+
+        # move the paddle towards the ball
+        # paddle located to the left, so move right
+        if (pp_x < pb_x):
             direction = right
-        elif (direction == "s"):
-            direction = neutral
-        # any other character quits
+        # paddle located to the right so move left
+        elif (pp_x > pb_x):
+            direction = left
+        # otherwise stay in place
         else:
-            print("Unsupported direction:", direction)
-            exit()
+            direction = neutral
+
+        #time.sleep(0.05)
 
         # take an input and store it at address given by parameter
         if (mode1 == 0):
@@ -245,9 +261,4 @@ while(instructions[ip] != 99):
     else:
         print("ERROR")
 
-#print(instructions)
-#print("Relative Base:", relativeBase)
-#print("Output Value:", outputValue)
-
-#print("Block tiles:", countScreen(screen))
-print("You lose!")
+print("Score:", score)
