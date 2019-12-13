@@ -6,8 +6,9 @@ paddle = 3
 ball = 4
 
 # create the screen array, filling it with empty (not needed)
-size = 1500
-screen = [[empty for i in range(size)] for j in range(size)]
+size_x = 80
+size_y = 24
+screen = [[empty for i in range(size_x)] for j in range(size_y)]
 
 # pretty print the screen
 def printScreen(m):
