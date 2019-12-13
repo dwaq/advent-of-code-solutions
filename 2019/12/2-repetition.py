@@ -27,15 +27,6 @@ for line in inputText:
 #print(position)
 #print(velocity)
 
-''' pretty print the starting data '''
-'''
-print("After {} steps:".format(0))
-for x in range(len(position)):
-    print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
-        position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
-print()
-'''
-
 while(True):
     ''' first apply gravity '''
     # consider each pair
@@ -63,15 +54,6 @@ while(True):
         for a in range(3):
             position[p][a] += velocity[p][a]
 
-    ''' pretty print the data '''
-    '''
-    print("After {} steps:".format(step+1))
-    for x in range(len(position)):
-        print("pos=<x={:3}, y={:3}, z={:3}>, vel=<x={:3}, y={:3}, z={:3}>".format(
-            position[x][0], position[x][1], position[x][2], velocity[x][0], velocity[x][1], velocity[x][2]))
-    print()
-    '''
-
     ''' Find when all of the moons' positions and velocities exactly match a previous point in time. '''
     # hash the data
     thisHash = (str(position) + str(velocity))
@@ -86,23 +68,3 @@ while(True):
     # otherwise add to the list
     else:
         hashes.add(thisHash)
-
-''' calculate the total energy in the system '''
-'''
-totalEnergy = 0
-
-for moon in range(len(position)):
-    potentialEnergy = 0
-    kineticEnergy = 0
-    # go through x, y, and z
-    for a in range(3):
-        # potential energy is absolute value sum of positions
-        potentialEnergy += abs(position[moon][a])
-        # kinetic energy is the absolute value sum of velocity
-        kineticEnergy += abs(velocity[moon][a])
-
-    # energy of moon is potential energy times kinetic energy
-    totalEnergy += (potentialEnergy * kineticEnergy)
-
-print("Total energy:", totalEnergy)
-'''
