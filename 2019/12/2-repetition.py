@@ -74,7 +74,10 @@ while(True):
 
     ''' Find when all of the moons' positions and velocities exactly match a previous point in time. '''
     # hash the data
-    thisHash = hash(str(position) + str(velocity))
+    thisHash = (str(position) + str(velocity))
+    #thisHash = hash(combine)
+    #thisHash = hashids.encode(combine)
+    #print(thisHash)
 
     # has this happened before?
     if (thisHash in hashes):
