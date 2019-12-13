@@ -1,4 +1,6 @@
 import time
+from os import system
+import pyscreenshot as ImageGrab
 
 # tiles
 empty = 0
@@ -17,8 +19,12 @@ size_x = 80
 size_y = 24
 screen = [[empty for i in range(size_x)] for j in range(size_y)]
 
+counter = 1
+
 # pretty print the screen
 def printScreen(m):
+    global counter
+    system('cls') 
     # print score at the top
     print("score:", score)
     for line in m:
@@ -36,6 +42,17 @@ def printScreen(m):
 
             print(l, end =" ")
         print()
+
+    # wait before taking photo
+    time.sleep(0.1)
+
+    # grab a defined box in this process
+    im = ImageGrab.grab(bbox=(285, 570, 855, 1000), childprocess=False)
+
+    # save image file
+    im.save(str(counter)+'.png')
+
+    counter += 1
 
 # count number of pixels that were set as a block
 # AKA not empty
@@ -196,7 +213,7 @@ while(instructions[ip] != 99):
 
         ip += 4
     elif(i==3):
-        #printScreen(screen)
+        printScreen(screen)
 
         # position of ball
         (pb_y, pb_x) = index_2d(screen, ball)
