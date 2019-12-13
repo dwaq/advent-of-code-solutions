@@ -1,9 +1,16 @@
+import msvcrt
+
 # tiles
 empty = 0
 wall = 1
 block = 2
 paddle = 3
 ball = 4
+
+# joystick positions
+neutral = 0
+left = -1
+right = 1
 
 # create the screen array, filling it with empty (not needed)
 size_x = 80
@@ -180,18 +187,29 @@ while(instructions[ip] != 99):
         ip += 4
     elif(i==3):
         printScreen(screen)
-        direction = input()
-        print("input")
-        '''
+        # gets one unicode character from input
+        direction = msvcrt.getwch()
+        # standard gaming inputs (asd)
+        if (direction == "a"):
+            direction = left
+        elif (direction == "d"):
+            direction = right
+        elif (direction == "s"):
+            direction = neutral
+        # any other character quits
+        else:
+            print("Unsupported direction:", direction)
+            exit()
+
         # take an input and store it at address given by parameter
         if (mode1 == 0):
-            instructions[instructions[ip+1]] = getPanelColor()
+            instructions[instructions[ip+1]] = direction
         elif(mode1 == 1):
-            instructions[ip+1] = getPanelColor()
+            instructions[ip+1] = direction
         elif (mode1 == 2):
-            instructions[instructions[ip+1]+relativeBase] = getPanelColor()
+            instructions[instructions[ip+1]+relativeBase] = direction
         ip += 2
-        '''
+
     elif(i==4):
         # outputs the value of its only parameter
         #outputValue = a
@@ -231,4 +249,5 @@ while(instructions[ip] != 99):
 #print("Relative Base:", relativeBase)
 #print("Output Value:", outputValue)
 
-print("Block tiles:", countScreen(screen))
+#print("Block tiles:", countScreen(screen))
+print("You lose!")
