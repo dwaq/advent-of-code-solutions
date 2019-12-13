@@ -16,10 +16,15 @@ def printScreen(m):
         for l in line:
             if(l==empty):
                 l=' '
-            elif(l==black):
-                l='.'
-            elif(l==white):
-                l='#'
+            elif(l==wall):
+                l='▩'
+            elif(l==block):
+                l='▪'
+            elif(l==paddle):
+                l='▬'
+            elif(l==ball):
+                l='◍'
+
             print(l, end =" ")
         print()
 
