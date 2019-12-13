@@ -4,7 +4,7 @@ inputText = open("positions.txt", "r")
 
 position = []
 velocity = []
-hashes = []
+hashes = set()
 
 for line in inputText:
     # remove extra characters
@@ -82,7 +82,7 @@ while(True):
         break
     # otherwise add to the list
     else:
-        hashes.append(thisHash)
+        hashes.add(thisHash)
 
 ''' calculate the total energy in the system '''
 '''
