@@ -1,10 +1,10 @@
 import itertools
+from math import gcd
 
 inputText = open("positions.txt", "r")
 
 position = []
 velocity = []
-hashes = set()
 
 for line in inputText:
     # remove extra characters
@@ -27,18 +27,23 @@ for line in inputText:
 #print(position)
 #print(velocity)
 
-while(True):
-    ''' first apply gravity '''
-    # consider each pair
-    # get every permutation of the phase setting
-    possibilities = itertools.permutations(range(4), 2)
-    for p in possibilities:
-        # p is a tuple in format (1st position, 2nd position)
-        #print(p, p[0], p[1])
+# store the location that the axis repeats
+repeat = [0,0,0]
 
-        # each axis's velocity changes by 1 based on positions
-        # go through x, y, and z
-        for a in range(3):
+# go through x, y, and z seperately
+for a in range(3):
+    # reset the hash set each time
+    hashes = set()
+
+    while(True):
+        ''' first apply gravity '''
+        # consider each pair
+        # get every permutation of the phase setting
+        possibilities = itertools.permutations(range(4), 2)
+        for p in possibilities:
+            # p is a tuple in format (1st position, 2nd position)
+
+            # each axis's velocity changes by 1 based on positions
             # if lower, increase velocity
             if (position[p[0]][a] < position[p[1]][a]):
                 velocity[p[0]][a] += 1
@@ -47,24 +52,32 @@ while(True):
                 velocity[p[0]][a] -= 1
             # if the same, don't change
 
-    ''' then apply velocity '''
-    # add the velocity of each moon to its position
-    for p in range(4):
-        # go through x, y, and z
-        for a in range(3):
+        # store the "hash"
+        thisHash = ""
+
+        ''' then apply velocity '''
+        # add the velocity of each moon to its position
+        for p in range(4):
             position[p][a] += velocity[p][a]
 
-    ''' Find when all of the moons' positions and velocities exactly match a previous point in time. '''
-    # hash the data
-    thisHash = (str(position) + str(velocity))
-    #thisHash = hash(combine)
-    #thisHash = hashids.encode(combine)
-    #print(thisHash)
+            # append position and velocity to hash
+            # (reusing this loop because data is already calculated)
+            thisHash += str(position[p][a]) + str(velocity[p][a])
 
-    # has this happened before?
-    if (thisHash in hashes):
-        print('Occurred at:', len(hashes))
-        break
-    # otherwise add to the list
-    else:
-        hashes.add(thisHash)
+        ''' Find when all of the moons' positions and velocities exactly match a previous point in time. '''
+        # has this happened before?
+        if (thisHash in hashes):
+            print(a, 'occurred at:', len(hashes))
+            repeat[a] = len(hashes)
+            break
+        # otherwise add to the list
+        else:
+            hashes.add(thisHash)
+
+# get least common multiple
+# https://stackoverflow.com/a/42472824/7564623
+lcm = repeat[0]
+for i in repeat[1:]:
+    lcm = lcm*i//gcd(lcm, i)
+
+print("Occurred at", lcm)
