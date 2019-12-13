@@ -169,6 +169,8 @@ while(instructions[ip] != 99):
 
         ip += 4
     elif(i==3):
+        printScreen(screen)
+        direction = input()
         print("input")
         '''
         # take an input and store it at address given by parameter
