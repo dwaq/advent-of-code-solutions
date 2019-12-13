@@ -12,14 +12,16 @@ screen = [[empty for i in range(size_x)] for j in range(size_y)]
 
 # pretty print the screen
 def printScreen(m):
+    # print score at the top
+    print("score:", score)
     for line in m:
         for l in line:
             if(l==empty):
                 l=' '
             elif(l==wall):
-                l='▩'
+                l='▯'
             elif(l==block):
-                l='▪'
+                l='▣'
             elif(l==paddle):
                 l='▬'
             elif(l==ball):
@@ -46,6 +48,9 @@ py = None
 # so count each to understand where to go
 outputCounter = 0
 
+# keep track of the score
+score = 0
+
 # set the x and y position and the tile
 def drawScreen(value):
     # use global values
@@ -60,9 +65,14 @@ def drawScreen(value):
     # second is y position
     elif (sequence == 1):
         py = value
-    # third is tile
+    # third is tile or score
     elif (sequence == 2):
-        screen[py][px] = value
+        # special values to update score
+        if ((px == -1) and (py == 0)):
+            score = value
+        # otherwise update the screen
+        else:
+            screen[py][px] = value
     else:
         print("Issue with sequence")
 
