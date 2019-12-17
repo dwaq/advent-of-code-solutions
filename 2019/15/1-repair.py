@@ -43,6 +43,10 @@ def printShip(m):
         for x, l in enumerate(line):
             if(l==None):
                 l=' '
+            if(l==valid):
+                l=' '
+            if((y == size//2) and (x == size//2)):
+                l = '*'
             if((y == py) and (x == px)):
                 l = droid
             print(l, end =" ")
