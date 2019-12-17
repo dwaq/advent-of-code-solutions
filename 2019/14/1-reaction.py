@@ -36,21 +36,19 @@ ingredients = {'FUEL': 1}
 #ingredients = {'BC': 3}
 #ingredients = {'CA': 4}
 
-# there may be leftover ingredients; store them here
-leftover = {}
-
-ore = 0
+# store each loop's output here
+new_ingredients = {}
 
 def substitute():
-    global ore, ingredients, reactions
+    global reactions, ingredients, new_ingredients
 
     # what is still left to reduce
     print("ingredients:", ingredients)
     
     # loop through those ingredients
     # starting with the largest value
-    for i in sorted(ingredients, key=ingredients.get, reverse=True):
-        #for i in ingredients:
+    #for i in sorted(ingredients, key=ingredients.get, reverse=True):
+    for i in ingredients:
 
         # this is the one we're working with
         print("current ingredient", i)
@@ -68,6 +66,9 @@ def substitute():
                     #print ("(key, value):", (key, value))
                     #print("data", ingredients[i],  r['out'][i], value)
 
+                    #if key == 'ORE':
+                    #    pass
+
                     # calculate how many inputs we need to make the current ingredient
 
                     # need ingredients[i] number of current ingredient
@@ -80,22 +81,17 @@ def substitute():
 
                     # ore is stored outside of ingredients{}
                     # so I know when ingredients are empty
-                    if key == 'ORE':
-                        ore += additional
+                    #if key == 'ORE':
+                    #    ore += additional
                     # otherwise update the new ingredient
-                    else:
-                        
-                        # check if the new ingredient is already present
-                        existing = 0
-                        if key in leftover:
-                            existing = leftover[key]
-                            print("Existing", existing, "of", key)
-                            # remove so I don't double count it
-                            del leftover[key]
+                    #else:
 
-                        # update the quantity of the ingredient
-                        # if new, existing will be 0, so it will only equal to additional
-                        ingredients[key] = existing + additional
+                    # check if the new ingredient is already present
+                    if key in new_ingredients:
+                        new_ingredients[key] += additional
+                    # update the quantity of the ingredient
+                    else:
+                        new_ingredients[key] = additional
                 
                     # remove the used quantity of the old ingredient
                     # additional//value = multiplier
@@ -103,26 +99,21 @@ def substitute():
                     # multiply to get how many are made
                     # then remove old amount (ingredients[i]) to get current amount remaining
                     #print(additional, value, additional//value, r['out'][i], ingredients[i])
-                    leftover[i] = ((additional//value) * r['out'][i]) - ingredients[i]
+                    #leftover[i] = ((additional//value) * r['out'][i]) - ingredients[i]
 
-                # remove from ingredients list now
-                del ingredients[i]
-
-                
-                print("new ingredients", ingredients)
-                
-                print("Leftover ingredients:", i, leftover)
-                #print("number of ore", ore)
-                
-                #if (i == 'C'):
-                #    exit()
-                
-                return
+                print("New ingredients", new_ingredients)
+                print()
 
 
-while (len(ingredients) > 0):
-    substitute()
-    #time.sleep(1)
 
-    print ("number of ore:", ore)
+substitute()
+while (len(new_ingredients) > 0):
     print()
+    ingredients = new_ingredients.copy()
+    new_ingredients.clear()
+    substitute()
+
+#time.sleep(1)
+
+print ("number of ore:", ingredients['ORE'])
+print()
