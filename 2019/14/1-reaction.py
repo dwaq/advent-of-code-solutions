@@ -47,35 +47,35 @@ def substitute():
     
     # loop through those ingredients
     # starting with the largest value
-    #for i in sorted(ingredients, key=ingredients.get, reverse=True):
-    for i in ingredients:
+    #for ingredient in sorted(ingredients, key=ingredients.get, reverse=True):
+    for ingredient in ingredients:
 
         # this is the one we're working with
-        print("current ingredient", i)
+        print("current ingredient", ingredient)
 
         # go through the reactions to find out how to make that ingredient
-        for r in reactions:
+        for reaction in reactions:
             
             # found the reaction needed to make that ingredient
-            if i in r['out']:
+            if ingredient in reaction['out']:
                 # recipe for that ingredient
-                print("recipe:", r)
+                print("recipe:", reaction)
                 
                 # inputs to make that ingredient
-                for key, value in r['in'].items(): 
+                for key, value in reaction['in'].items(): 
                     #print ("(key, value):", (key, value))
-                    #print("data", ingredients[i],  r['out'][i], value)
+                    #print("data", ingredients[ingredient],  reaction['out'][ingredient], value)
 
                     #if key == 'ORE':
                     #    pass
 
                     # calculate how many inputs we need to make the current ingredient
 
-                    # need ingredients[i] number of current ingredient
-                    # divide by the amount that is made in one reaction (r['out][i])
+                    # need ingredients[ingredient] number of current ingredient
+                    # divide by the amount that is made in one reaction (reaction['out][ingredient])
                     # can't make a partial batch, so round up using ceil()
                     # then multiply by the amount of the new ingredients (value)
-                    additional = math.ceil(ingredients[i] / r['out'][i]) * value
+                    additional = math.ceil(ingredients[ingredient] / reaction['out'][ingredient]) * value
                     
                     print("Additional", additional, "of", key)
 
@@ -95,11 +95,11 @@ def substitute():
                 
                     # remove the used quantity of the old ingredient
                     # additional//value = multiplier
-                    # r['out'][i] = recipe quantity
+                    # reaction['out'][ingredient] = recipe quantity
                     # multiply to get how many are made
-                    # then remove old amount (ingredients[i]) to get current amount remaining
-                    #print(additional, value, additional//value, r['out'][i], ingredients[i])
-                    #leftover[i] = ((additional//value) * r['out'][i]) - ingredients[i]
+                    # then remove old amount (ingredients[ingredient]) to get current amount remaining
+                    #print(additional, value, additional//value, reaction['out'][ingredient], ingredients[ingredient])
+                    #leftover[ingredient] = ((additional//value) * reaction['out'][ingredient]) - ingredients[ingredient]
 
                 print("New ingredients", new_ingredients)
                 print()
