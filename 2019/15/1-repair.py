@@ -1,5 +1,4 @@
 import random
-import time
 
 # Accept a movement command via an input instruction.
 north = 1
@@ -38,23 +37,25 @@ ship[py][px] = valid
 # pretty print the map
 def printShip(m):
     global ship, dx, dy, px, py
+    numberOfMoves = 0
     # print it backwards, because higher numbers should be up
     for y, line in enumerate((m)):
         for x, l in enumerate(line):
-            if(l==None):
-                l=' '
-            if(l==valid):
+            # count number of valid positions
+            if(l == valid):
+                numberOfMoves+=1
+
+            # change the way things are displayed
+            if(l == None):
                 l=' '
             if((y == size//2) and (x == size//2)):
                 l = '*'
             if((y == py) and (x == px)):
                 l = droid
             print(l, end =" ")
-            #print((x,y),end="")
         print()
-    print((px, py))
+    print("Number of moves:", numberOfMoves)
     print("-"*size)
-    #time.sleep(1)
 
 # return a direction to move
 def moveDroid():
@@ -90,6 +91,8 @@ def moveDroid():
     
     print("Droid is stuck!")
 
+numberOfMoves = 0
+
 # see where the Droid is
 def checkDroidStatus(a):
     global ship, dx, dy, px, py
@@ -101,8 +104,14 @@ def checkDroidStatus(a):
         dx, dy = px, py
     elif(a == successful):
         #print("Successful")
-        # mark position as valid
-        ship[dy][dx] = valid
+        # mark position as valid if it was previously undiscovered
+        if (ship[dy][dx] == None):
+            ship[dy][dx] = valid
+        # otherwise moving back into a valid position
+        # so make the last position invalid
+        elif(ship[dy][dx] == valid):
+            ship[py][px] = None
+
         # update current position
         px, py = dx, dy
     elif(a == complete):
