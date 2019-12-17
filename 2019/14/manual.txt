@@ -1,0 +1,30 @@
+9 ORE => 2 A
+8 ORE => 3 B
+7 ORE => 5 C
+
+
+
+#replace, multiply
+6 A,
+8 B
+15 B,
+21 C
+16 C,
+4 A 
+ => 1 FUEL
+
+# reduce
+10 A,
+23 B,
+37 C,
+
+ => 1 FUEL
+
+
+# replace, multiply
+(math.ceil(10/2)) * 9 = 45
+(math.ceil(23/3)) * 8 = 64
+(math.ceil(37/5)) * 7 = 56
+
+#reduce
+165
