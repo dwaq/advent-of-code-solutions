@@ -1,3 +1,4 @@
+import random
 import time
 
 # Accept a movement command via an input instruction.
@@ -21,7 +22,7 @@ wall = '#'
 valid = '.'
 
 # create the ship's map array, filling it with None
-size = 25
+size = 50
 ship = [[None for i in range(size)] for j in range(size)]
 
 # starting position (in the middle, //= not a float)
@@ -54,46 +55,58 @@ def printShip(m):
 # return a direction to move
 def moveDroid():
     global ship, dx, dy, px, py
-    # if the next tile in that direction is unexplored,
-    # then move there
-    if(ship[py+1][px] == None):
-        print("Try north")
-        dy = py+1
-        return north
-    elif(ship[py][px+1] == None):
-        print("Try east")
-        dx = px+1
-        return east
-    elif(ship[py-1][px] == None):
-        print("Try south")
-        dy = py-1
-        return south
-    elif(ship[py][px-1] == None):
-        print("Try west")
-        dx = px-1
-        return west
-    else:
-        print("Droid is stuck!")
+
+    # an array filled with the four directions in a random order
+    random_directions = random.sample(range(1, 5, 1), 4)
+
+    # try each direction
+    for direction in random_directions:
+        # if the next tile in that direction is unexplored,
+        # then move there
+        if (direction == north):
+            if(ship[py+1][px] != wall):
+                #print("Try north")
+                dy = py+1
+                return north
+        elif(direction == east):
+            if(ship[py][px+1] != wall):
+                #print("Try east")
+                dx = px+1
+                return east
+        elif(direction == south):
+            if(ship[py-1][px] != wall):
+                #print("Try south")
+                dy = py-1
+                return south
+        elif(direction == west):
+            if(ship[py][px-1] != wall):
+                #print("Try west")
+                dx = px-1
+                return west
+    
+    print("Droid is stuck!")
 
 # see where the Droid is
 def checkDroidStatus(a):
     global ship, dx, dy, px, py
     if(a == unsuccessful):
-        print("Unsuccessful")
+        #print("Unsuccessful")
         # mark desired position as invalid
         ship[dy][dx] = wall
         # reset desired position
         dx, dy = px, py
     elif(a == successful):
-        print("Successful")
+        #print("Successful")
         # mark position as valid
         ship[dy][dx] = valid
         # update current position
         px, py = dx, dy
     elif(a == complete):
         print("Found the oxygen system at", (dx, dy))
+        printShip(ship)
+        exit()
 
-    printShip(ship)
+    #printShip(ship)
 
 
 # relative base
