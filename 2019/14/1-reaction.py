@@ -77,7 +77,7 @@ def substitute():
                     # then multiply by the amount of the new ingredients (value)
                     additional = math.ceil(ingredients[ingredient] / reaction['out'][ingredient]) * value
                     
-                    print("Additional", additional, "of", key)
+                    print("\tAdditional", additional, "of", key)
 
                     # ore is stored outside of ingredients{}
                     # so I know when ingredients are empty
@@ -101,8 +101,8 @@ def substitute():
                     #print(additional, value, additional//value, reaction['out'][ingredient], ingredients[ingredient])
                     #leftover[ingredient] = ((additional//value) * reaction['out'][ingredient]) - ingredients[ingredient]
 
-                print("New ingredients", new_ingredients)
-                print()
+    print("New ingredients", new_ingredients)
+    print()
 
 
 
