@@ -34,17 +34,20 @@ dx, dy = px, py
 # start at the center
 ship[py][px] = valid
 
+# count number of valid positions in the map
+def countMoves(m):
+    numberOfMoves = 0
+    for line in m:
+        for l in line:
+            if(l == valid):
+                numberOfMoves+=1
+    return numberOfMoves
+
 # pretty print the map
 def printShip(m):
     global ship, dx, dy, px, py
-    numberOfMoves = 0
-    # print it backwards, because higher numbers should be up
-    for y, line in enumerate((m)):
+    for y, line in enumerate(m):
         for x, l in enumerate(line):
-            # count number of valid positions
-            if(l == valid):
-                numberOfMoves+=1
-
             # change the way things are displayed
             if(l == None):
                 l=' '
@@ -54,7 +57,6 @@ def printShip(m):
                 l = droid
             print(l, end =" ")
         print()
-    print("Number of moves:", numberOfMoves)
     print("-"*size)
 
 # return a direction to move
@@ -93,9 +95,11 @@ def moveDroid():
 
 numberOfMoves = 0
 
+foundOxygenSystem = False
+
 # see where the Droid is
 def checkDroidStatus(a):
-    global ship, dx, dy, px, py
+    global ship, dx, dy, px, py, numberOfMoves, foundOxygenSystem
     if(a == unsuccessful):
         #print("Unsuccessful")
         # mark desired position as invalid
@@ -104,23 +108,36 @@ def checkDroidStatus(a):
         dx, dy = px, py
     elif(a == successful):
         #print("Successful")
-        # mark position as valid if it was previously undiscovered
-        if (ship[dy][dx] == None):
-            ship[dy][dx] = valid
-        # otherwise moving back into a valid position
-        # so make the last position invalid
-        elif(ship[dy][dx] == valid):
-            ship[py][px] = None
+        # for part 2, we don't want to start counting until we find the Oxygen System
+        if(foundOxygenSystem):    
+            # mark position as valid if it was previously undiscovered
+            if (ship[dy][dx] == None):
+                ship[dy][dx] = valid
+            # otherwise moving back into a valid position
+            # so make the last position invalid
+            elif(ship[dy][dx] == valid):
+                ship[py][px] = None
+
+            # how many moves did it take to get here?
+            moves = countMoves(ship)
+
+            # get the furthest distance
+            if (moves > numberOfMoves):
+                numberOfMoves = moves
+                print("Number of moves:", moves)
+
+                # print map to show status
+                printShip(ship)
+        
+        # update current position
+        px, py = dx, dy
+    # complete means we found the oxygen system,
+    # so start counting from that point    
+    elif(a == complete):
+        foundOxygenSystem = True
 
         # update current position
         px, py = dx, dy
-    elif(a == complete):
-        print("Found the oxygen system at", (dx, dy))
-        printShip(ship)
-        exit()
-
-    #printShip(ship)
-
 
 # relative base
 relativeBase = 0
