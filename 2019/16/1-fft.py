@@ -35,7 +35,7 @@ for phase in range(1, rounds+1):
         # take each value in the pattern
         for p in basePattern:
             # repeat it the number of times
-            for count in range(whichElement):
+            for _ in range(whichElement):
                 pattern.append(p)
         
         #print(whichElement, pattern)
