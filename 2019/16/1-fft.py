@@ -1,7 +1,11 @@
 import math
 
 #As input, FFT takes a list of numbers. In the signal you received (your puzzle input), each number is a single digit: data like 15243 represents the sequence 1, 5, 2, 4, 3.
-signal = "12345678"
+#signal = "12345678"
+#signal = "80871224585914546619083218645595"
+#signal = "19617804207202209144916044189917"
+#signal = "69317163492948606335995924319873"
+signal = "59728776137831964407973962002190906766322659303479564518502254685706025795824872901465838782474078135479504351754597318603898249365886373257507600323820091333924823533976723324070520961217627430323336204524247721593859226704485849491418129908885940064664115882392043975997862502832791753443475733972832341211432322108298512512553114533929906718683734211778737511609226184538973092804715035096933160826733751936056316586618837326144846607181591957802127283758478256860673616576061374687104534470102346796536051507583471850382678959394486801952841777641763547422116981527264877636892414006855332078225310912793451227305425976335026620670455240087933409"
 
 sequence = [int(digit) for digit in signal]
 
@@ -10,7 +14,7 @@ sequence = [int(digit) for digit in signal]
 basePattern = [0, 1, 0, -1]
 
 # number of rounds to test
-rounds = 4
+rounds = 100
 
 for phase in range(1, rounds+1):
     #print(phase)
@@ -51,21 +55,22 @@ for phase in range(1, rounds+1):
         #print()
 
         for digit in range(len(sequence)):
-            print(str(sequence[digit])+'*'+ str(pattern[digit + 1]), '\t+ ', end='')
+            #print(str(sequence[digit])+'*'+ str(pattern[digit + 1]), '\t+ ', end='')
             elementSum += sequence[digit] * pattern[digit + 1]
 
         newDigit = abs(elementSum) % 10
 
-        print('\x08\x08=',newDigit)
+        #print('\x08\x08=',newDigit)
 
         newList[element] = newDigit
 
     # convert array to number
     sig = 0
-    for n in newList:
+    # only want first 8 digits
+    for n in newList[:8]:
         sig = (sig*10) + n
 
-    print("\nAfter", phase, "phase:", sig, "\n")
+    print("After", phase, "phase:", sig)
 
     sequence = newList
 
