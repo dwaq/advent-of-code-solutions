@@ -2,15 +2,24 @@ import math
 
 # As input, FFT takes a list of numbers
 #signal = "12345678"
-#signal = "80871224585914546619083218645595"
-#signal = "19617804207202209144916044189917"
-#signal = "69317163492948606335995924319873"
+#signal = "03036732577212944063491565474664"
+#signal = "02935109699940807407585447034323"
+#signal = "03081770884921959731165446850517"
 signal = "59728776137831964407973962002190906766322659303479564518502254685706025795824872901465838782474078135479504351754597318603898249365886373257507600323820091333924823533976723324070520961217627430323336204524247721593859226704485849491418129908885940064664115882392043975997862502832791753443475733972832341211432322108298512512553114533929906718683734211778737511609226184538973092804715035096933160826733751936056316586618837326144846607181591957802127283758478256860673616576061374687104534470102346796536051507583471850382678959394486801952841777641763547422116981527264877636892414006855332078225310912793451227305425976335026620670455240087933409"
+
+# The real signal is your puzzle input repeated 10000 times.
+signal *= 10000
 
 # convert signal into a list of ints
 sequence = [int(digit) for digit in signal]
 
 #print(sequence)
+
+# The first seven digits of your initial input signal also represent the message offset
+messageOffset = 0
+for n in sequence[:7]:
+    messageOffset = (messageOffset*10) + n
+#print(messageOffset)
 
 # this is the pattern that everything is multiplied against
 basePattern = [0, 1, 0, -1]
@@ -63,13 +72,10 @@ for phase in range(1, rounds+1):
         # add that digit to the new list
         newList[element] = newDigit
 
-    # convert array to number (for printing)
-    sig = 0
-    # only want first 8 digits
-    for n in newList[:8]:
-        sig = (sig*10) + n
-
-    print("After", phase, "phase:", sig)
+    print("Completed", phase, "phases")
 
     # make this list the sequence for the next phase
     sequence = newList
+
+# the eight-digit message in the final output list
+print(sequence[messageOffset:messageOffset+8])
