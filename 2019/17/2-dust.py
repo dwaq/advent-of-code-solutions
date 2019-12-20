@@ -1,10 +1,31 @@
-# return a direction to move
-def moveVacuum():
-    exit()
-    return None
+# store movement instructions from file
+# each character as a new list item
+moves = []
+with open("movement.txt", "r") as fp:
+    for f in (fp):
+        moves += list(f)
 
-def printDust(dust):
-    print("Dust Collected:", dust)
+# convert each character from ASCII to int
+moves = [ord(m) for m in moves]
+
+# index of character to send
+moveIndex = 0
+
+# return a movement instruction
+def moveVacuum():
+    global moves, moveIndex
+    #print("moving...", moveIndex)
+    instruction = moves[moveIndex]
+    moveIndex+=1
+    return instruction
+
+def printOutput(o):
+    # non-ASCII character is printed normally
+    if (o > 255):
+        print("Dust Collected:", o)
+    # otherwise convert to ASCII and print
+    else:
+        print(chr(o), end='')
 
 # relative base
 relativeBase = 0
@@ -118,7 +139,7 @@ while(instructions[ip] != 99):
     elif(i==4):
         # outputs the value of its only parameter
         #outputValue = a
-        printDust(a)
+        printOutput(a)
         #print("Output at", ip, "is", a)
         ip += 2
     elif(i==5):
