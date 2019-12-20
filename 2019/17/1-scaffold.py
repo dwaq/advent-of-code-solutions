@@ -3,19 +3,42 @@ def moveDroid():
     exit()
     return None
 
-# 
-def printAscii(a):
+# hold the drawn area
+scaffolding = []
+scaffolding.append([])
+
+# store the current line
+line = 0
+
+def storeAscii(a):
+    global scaffolding, line
+
     # convert from int ascii code to char
     asc = chr(a)
-    print(asc, end='')
+
+    # increase line with newline
+    if (asc == '\n'):
+        line +=1
+        scaffolding.append([])
+    # otherwise store the value on this line
+    else:
+        scaffolding[line].append(asc)
+
+    #print(asc, end='')
+
+def printScaffolding(s):
+    for l in s:
+        for q in l:
+            print(q, end='')
+        print()
 
 # relative base
 relativeBase = 0
 
 intcode =[]
 with open("intcode.txt", "r") as fp:
-    for line in (fp):
-        instructions = line.split(",")
+    for f in (fp):
+        instructions = f.split(",")
 
 # convert all numbers to int
 instructions = [int(x) for x in instructions]
@@ -121,7 +144,7 @@ while(instructions[ip] != 99):
     elif(i==4):
         # outputs the value of its only parameter
         #outputValue = a
-        printAscii(a)
+        storeAscii(a)
         #print("Output at", ip, "is", a)
         ip += 2
     elif(i==5):
@@ -152,3 +175,6 @@ while(instructions[ip] != 99):
         ip += 2
     else:
         print("ERROR")
+
+# at the end, print the scaffolding
+printScaffolding(scaffolding)
