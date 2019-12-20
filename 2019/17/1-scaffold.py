@@ -178,3 +178,27 @@ while(instructions[ip] != 99):
 
 # at the end, print the scaffolding
 printScaffolding(scaffolding)
+
+# calculate the alignment parameters
+sumOfAlignmentParameters = 0
+
+# find all locations that cross
+for y, y_line in enumerate(scaffolding):
+    for x, _ in enumerate(y_line):
+        # catch out of bounds errors
+        try:
+            # test current, above, below, right, and left
+            if ((scaffolding[y][x]   == '#') and
+                (scaffolding[y+1][x] == '#') and
+                (scaffolding[y-1][x] == '#') and 
+                (scaffolding[y][x+1] == '#') and 
+                (scaffolding[y][x-1] == '#')):
+                alignmentParameter = x*y
+                sumOfAlignmentParameters += alignmentParameter
+                print((x,y), alignmentParameter)
+                #scaffolding[y][x] = 'O'
+        except:
+            #print("break", ((x,y)))
+            continue
+
+print("\nSum of alignment parameters:", sumOfAlignmentParameters)
