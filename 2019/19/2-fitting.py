@@ -1,50 +1,64 @@
-# The program uses two input instructions to request the X and Y position to which the drone should be deployed.
-# Negative numbers are invalid and will confuse the drone; all numbers should be zero or positive.
-
-# Then, the program will output whether the drone is stationary (0) or being pulled by something (1).
-
-# create an array for the beam's pattern, filling it with None
-size = 50
-picture = [[None for i in range(size)] for j in range(size)]
-
-# the X and Y positions to test
-x = 0
-y = 0
+# the X and Y positions to start the test
+# it can't be smaller than this because it needs to fit a 100 x 100 square
+x = 101
+y = 101
 
 # to switch between returning X and Y
 returnXorY = 0
 
+# when the first point is valid, test the second point
+testSecondPoint = False
+
 # return a movement instruction
 def moveDrone():
-    global x, y, returnXorY, size
+    global x, y, returnXorY, testSecondPoint
 
     # every other movement is a different position
     # X, then Y, then repeat
     returnValue = None
     if(returnXorY%2 == 0):
-        returnValue = x
+        if (testSecondPoint == False):
+            returnValue = x
+        else:
+            # test second point's X
+            # index of 99 is 100 locations away (starting at 0)
+            returnValue = x + 99
+            print("Second point: (", returnValue, ", ", end='')
         #print('('+str(returnValue)+', ', end='')
         x+=1
     else:
-        returnValue = y
-        #print(str(returnValue)+'): ',end='')
-        # at the end of X, reset it and count Y up
-        if (x == size):
-            x=0
+        if (testSecondPoint == False):
+            returnValue = y
+        else:
+            # test second point's Y
+            returnValue = y - 99 + 1
+            print(returnValue, ") ", end='')
+            # after testing second point, go back a couple on X and count Y up once
+            x-=5
             y+=1
     returnXorY+=1
 
     return returnValue
 
-# set location to output of drone
-pointsAffected = 0
 def beamOrNoBeam(o):
-    #print(o)
-    global pointsAffected
-    # just add location (1 when seen) to count
-    pointsAffected += o
-    #global picture, x, y
-    #picture[y][x] = o
+    global x, y, testSecondPoint
+    #print((x,y))
+
+    # find a valid first point
+    if (testSecondPoint == False):
+        if (o == 1):
+            print("First point:", (x,y+1), "", end='')
+            testSecondPoint = True
+        #else:
+        #    print("Tested:", (x,y))
+    else:
+        print("Valid?", o)
+        # reset flag
+        testSecondPoint = False
+        if (o == 1):
+            # add 4 to counteract the -5 and 1 loop
+            print(((x+4)*10000)+(y-99))
+            exit()
 
 # reset and repeat machine
 # because need to run fresh instructions for each position
@@ -193,8 +207,7 @@ while(True):
         else:
             print("ERROR")
 
-    # at the end, print the count
+    # at the end, exit
     # X times Y times 2 for alternating between the two using returnXorY
-    if(returnXorY == size*size*2):
-        print("Points affected:", pointsAffected)
-        exit()
+    #if(returnXorY == size*size*2):
+    #    exit()
