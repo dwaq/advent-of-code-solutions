@@ -18,7 +18,7 @@
 # store movement instructions from file
 # each character as a new list item
 moves = []
-with open("movement.txt", "r") as fp:
+with open("movement2.txt", "r") as fp:
     for f in (fp):
         moves += list(f)
 

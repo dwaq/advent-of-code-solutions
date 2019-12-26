@@ -118,3 +118,37 @@ AND T J
 # jump if there are any holes before D
 
 WALK
+
+-------------------------
+PART 2!
+-------------------------
+# Checks A, B, C for holes
+# (AKA the reasons to jump)
+# start with OR because T is 0 to start
+OR A T
+AND B T
+AND C T
+# T=1 if all are ground -> want j=0
+# T=0 if any are holes -> want j=1
+
+# so invert T to make it like we want J to be
+NOT T T
+# T = J now
+
+# check if it is OK to jump and then move
+# so jump 4 places (D) then either
+# 1. move 1 spot from there (E)
+# 2. jump another 4 places from there (H)
+# D & (E | H)
+# Need to do in reverse with these instructions
+OR E J
+# ^ 1.
+OR H J
+# ^ 2.
+AND D J
+# jump 4 places and store result in J
+
+AND T J
+# jump if it's safe and there are any holes before D
+
+RUN
