@@ -11,7 +11,7 @@ newStack = 'deal into new stack'
 increment = 'deal with increment '
 cut = 'cut '
 
-numberOfCards = 10007
+numberOfCards = 119315717514047
 
 # fill deck with cards
 deck = [d for d in range(numberOfCards)]
@@ -20,24 +20,26 @@ deck = [d for d in range(numberOfCards)]
 
 #print(deck)
 
-for i in instructions:
-    # check the 3x techniques
-    if (i == newStack):
-        #print("New")
-        deck.reverse()
-    elif (cut in i):
-        n = int(i[len(cut):])
-        #print("Cut", n)
-        yourDeck = deck[n:]
-        cutCards = deck[:n]
-        deck = yourDeck + cutCards
-    elif (increment in i):
-        n = int(i[len(increment):])
-        #print("Increment", n)
-        newDeck = [None]*numberOfCards
-        for p, d in enumerate(deck):
-            #print("Position", (p*n)%numberOfCards, "Number", d)
-            newDeck[(p*n)%numberOfCards] = d
-        deck = newDeck
+# repeat the instructions this many times
+for _ in range(101741582076661):
+    for i in instructions:
+        # check the 3x techniques
+        if (i == newStack):
+            #print("New")
+            deck.reverse()
+        elif (cut in i):
+            n = int(i[len(cut):])
+            #print("Cut", n)
+            yourDeck = deck[n:]
+            cutCards = deck[:n]
+            deck = yourDeck + cutCards
+        elif (increment in i):
+            n = int(i[len(increment):])
+            #print("Increment", n)
+            newDeck = [None]*numberOfCards
+            for p, d in enumerate(deck):
+                #print("Position", (p*n)%numberOfCards, "Number", d)
+                newDeck[(p*n)%numberOfCards] = d
+            deck = newDeck
 
-print("Position of card 2019:", deck.index(2019))
+print("Card in position 2020:", deck[2020])
