@@ -1,0 +1,120 @@
+NOT A J
+# hole at A -> jump = 1
+
+NOT B T
+# hole at B -> T=1
+AND T J
+# hole at B and already jumping -> keep jumping
+
+NOT C T
+# hole at C -> t=1
+AND T J
+# hole at C and already jumping -> keep jumping
+
+AND D J
+# ground at D and already jumping -> keep jumping
+WALK
+
+-----------------
+
+NOT A J
+# hole at A, jump
+OR B J
+OR C J
+OR D J
+# doesn't matter what the rest are...
+WALK
+
+-----------------
+
+OR A T
+t=1 if A=ground
+OR B T
+t=1 if B or A is ground
+OR C T
+t=1 if C or B or A is ground
+OR D J
+# jump if D is ground
+AND T J
+# actually jump if there is any ground before that
+WALK
+
+------------------
+NOT A J
+# if A is a hole, jump=1
+NOT B T
+# if B is a hole, T=1
+OR T J
+# if A or B is a hole, jump=1
+NOT C T
+OR T J
+# if A or B or C is a hole, jump = 1
+OR D J
+# actually jump if D is ground
+WALK
+
+
+-----------------
+NOT A J
+# if A is a hole, jump=1
+NOT B T
+# if B is a hole, T=1
+OR T J
+# if A or B is a hole, jump=1
+NOT C T
+OR T J
+# if A or B or C is a hole, jump = 1
+OR D J
+# actually jump if D is ground
+
+# check if A,B,C are also ground
+# T would be 0 here
+AND T J
+# cancel jump if it is
+
+WALK
+
+
+-----------------------
+NOT A J
+NOT B T
+OR T J
+NOT C T
+OR T J
+OR D J
+
+# reset T to zero
+NOT J T
+
+# check if A,B,C are also ground
+
+OR A T
+AND B T
+AND C T
+
+AND T J
+# cancel jump if it is
+
+WALK
+
+
+-------------------------
+
+OR A T
+AND B T
+AND C T
+# T=1 if all are ground -> want j=0
+# T=0 if any are holes -> want j=1
+
+# so invert T
+NOT T T
+# T = J now
+
+OR D J
+# if D is ground -> j=1 
+# (want somewhere to land)
+
+AND T J
+# jump if there are any holes before D
+
+WALK
