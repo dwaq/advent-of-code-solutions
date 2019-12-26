@@ -33,12 +33,14 @@ class intCode(threading.Thread):
             else:
                 # this allows you to see the queue without popping data
                 # (so that other intcode computers can access it)
+                # TODO: THIS MIGHT NOT ACTUALLY WORK!
                 data = self.queue.queue[0]
                 #print("Data:", data)
                 # only use the data if it was assigned 
                 if (data[0] == self.network_address):
                     # getting it pops it from the queue
                     data = self.queue.get()
+                    # TODO: WHY DOES THIS NEVER PRINT?
                     print(self.network_address, "getting data:", data)
                     # append X and Y to input queue
                     self.input.put(data[1])
@@ -52,20 +54,20 @@ class intCode(threading.Thread):
 
     def sendOutput(self, o):
         #print("output:", o)
-        # append data to output array
+        # append data to output list
         self.output.append(o)
         # when it's full (3 items)
         if (len(self.output) == 3):
             print(self.network_address, "sending packet:", self.output)
 
-            # check for the answer to this part
+            # check for the answer to part 1
             if (self.output[0] == 255):
                 print("First Y value sent to address 255:", self.output[2])
                 exit()
 
             # put that packet on the queue for another device to take it
             self.queue.put(self.output)
-            # clear output queue
+            # clear output list
             self.output = []
 
     def run(self):
