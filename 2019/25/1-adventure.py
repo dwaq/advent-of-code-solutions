@@ -1,3 +1,5 @@
+from itertools import combinations
+
 responseBuffer = ""
 # get instructions to gather all items
 # and drop all items
@@ -5,16 +7,65 @@ with open("items.txt", "r") as fp:
     for line in (fp):
         responseBuffer += line
 
+options = [
+    "fuel cell",
+    "cake",
+    "pointer",
+    "boulder",
+    "mutex",
+    "antenna",
+    "tambourine",
+    "coin"
+]
+# get all possibilities with any number of items
+possibilities = []
+for numItems in range(len(options)):
+    possibilities += list(combinations(options, numItems+1))
+
+# for choosing each possibility
+index = 0
+# for storing response
+response = ""
+
 # return a movement instruction
 def moveDroid():
-    global responseBuffer
-    returnChar = ''
+    global responseBuffer, possibilities, index, response
 
     # when empty, get more input
     if (len(responseBuffer) == 0):
-        responseBuffer = input()
-        # add new line
-        responseBuffer += '\n'
+        # tested something, drop it, move to next one
+        if ("heavier" in response):
+            print("too light:", possibilities[index])
+
+            responseBuffer = ""
+            for thing in possibilities[index]:
+                responseBuffer += "drop "
+                responseBuffer += thing
+                responseBuffer += '\n'
+
+            index+=1
+        elif ("lighter" in response):
+            print("too heavy", possibilities[index])
+
+            responseBuffer = ""
+            for thing in possibilities[index]:
+                responseBuffer += "drop "
+                responseBuffer += thing
+                responseBuffer += '\n'
+        
+            index+=1
+
+        # take the new things
+        for thing in possibilities[index]:
+            responseBuffer += "take "
+            responseBuffer += thing
+            responseBuffer += '\n'
+        
+        # try it by moving onto the scale
+        responseBuffer += 'east\n'
+
+        # reset for next check 
+        response = ""
 
     # send one character
     returnChar = responseBuffer[0]
@@ -24,7 +75,10 @@ def moveDroid():
 
 def printOutput(o):
     # otherwise convert to ASCII and print
-    print(chr(o), end='')
+    #print(chr(o), end='')
+    # throw data into response instead of printing it
+    global response
+    response += chr(o)
 
 # relative base
 relativeBase = 0
@@ -169,3 +223,6 @@ while(instructions[ip] != 99):
         ip += 2
     else:
         print("ERROR")
+
+# found it! print results
+print(response)
