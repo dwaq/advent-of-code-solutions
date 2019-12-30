@@ -1,6 +1,6 @@
 # store state
 state = []
-with open("initial.txt", "r") as fp:
+with open("level.txt", "r") as fp:
     for f in (fp):
         line = f.strip('\n')
         # split line into tiles
@@ -12,6 +12,7 @@ size = 5
 # contents of cell
 bug = '#'
 empty = '.'
+grid = '?'
 
 # print the layout nicely
 def prettyPrint(a):
