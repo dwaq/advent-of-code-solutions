@@ -1,4 +1,8 @@
 responseBuffer = ""
+# get instructions to gather all items
+with open("items.txt", "r") as fp:
+    for line in (fp):
+        responseBuffer += line
 
 # return a movement instruction
 def moveDroid():
