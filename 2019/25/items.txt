@@ -29,3 +29,11 @@ take fuel cell
 east
 take boulder
 north
+drop fuel cell
+drop cake
+drop pointer
+drop boulder
+drop mutex
+drop antenna
+drop tambourine
+drop coin

@@ -1,5 +1,6 @@
 responseBuffer = ""
 # get instructions to gather all items
+# and drop all items
 with open("items.txt", "r") as fp:
     for line in (fp):
         responseBuffer += line
