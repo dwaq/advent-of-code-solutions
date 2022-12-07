@@ -3,7 +3,7 @@ txt = open("input.txt", "r").readlines()
 # get the length of the picture to later split into crates
 pic_len = len(txt[0])
 # get the height of the picture (hardcoded)
-pic_h = 4
+pic_h = 9
 # a stack is 4 chars wide
 crate_len = 4
 # number of stacks
@@ -73,5 +73,5 @@ for l, line in enumerate(txt):
 
         #print(crates)
 
-for x in range(1,4):
-    print(crates[x][-1],)
+for x in range(1,10):
+    print(crates[x][-1], end ="")
