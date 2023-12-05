@@ -57,7 +57,7 @@ def followMap(dic):
             # check if the seed is in the source range
             source_start = d[1]
             source_end = source_start + d[2]
-            if (seed >= source_start and seed <= source_end):
+            if (seed >= source_start and seed < source_end):
                 # if it is, change the seed to the destination + offset
                 destination = d[0]
                 offset = seed - source_start
