@@ -1,3 +1,5 @@
+from math import lcm
+
 file = open("input.txt", "r")
 # strip newlines
 txt = [x.strip("\n") for x in file.readlines()]
@@ -28,10 +30,14 @@ for l, line in enumerate(txt):
 
         maze[k] = v
 
+#print(maze)
+
 # start at locations that end with "A"
 starting = []
 # list of all locations
 locations = list(maze.keys())
+# end at locations that end with "Z"
+ending = []
 
 # loop through all locations
 for l in locations:
@@ -39,10 +45,15 @@ for l in locations:
     if l[2] == "A":
         starting.append(l)
 
-#print(starting)
+#print("starting locations:", starting)
 
-# steps to get there
-steps = 0
+# loop through all locations
+for l in locations:
+    # if it ends with "Z", add it to list
+    if l[2] == "Z":
+        ending.append(l)
+
+#print("ending locations:", ending)
 
 # direction index
 di = 0
@@ -50,38 +61,55 @@ di = 0
 mdi = len(directions)
 #print(mdi)
 
-foundExit = 0
+# steps needed for each ending
+ending_steps = []
 
-# keep going until we finish
-while(foundExit == 0):
-    # pick direction
-    d = directions[di]
+# change location based on direction FOR EACH starting point
+for location in starting:
+    start = location
+    #print(location)
 
-    # convert to 0 or 1 to use as index
-    d = 0 if d=="L" else 1
-    #print(d)
+    # reset steps for each one
+    steps = 0
+    # did we find the exit
+    foundExit = 0
 
-    # change location based on direction FOR EACH starting point
-    for i, s in enumerate(starting):
-        starting[i] = maze[s][d]
-    #print(starting)
+    # keep going until we find an exit
+    while(foundExit == 0):
+        # steps to get there
+        steps += 1
 
-    # assume we exit
-    foundExit = 1
+        # pick direction
+        d = directions[di]
 
-    # check if we made it to the exit
-    for s in starting:
-        #print(starting, s)
-        # if it doesn't end with "Z", we didn't exit
-        if s[2] != "Z":
-            foundExit = 0
-            break
+        # convert to 0 or 1 to use as index
+        d = 0 if d=="L" else 1
+        #print(d)
 
-    # go to next direction
-    di += 1
-    if (di >= mdi):
-        di = 0
+        # change location based on direction
+        location = maze[location][d]
+        #print(location)
 
-    steps += 1
+        # if we make it to an ending location
+        if location in ending:
+            #print("location found:", start, location, steps)
+            # remove from possible ending
+            ending.remove(location)
+            # keep track here of the steps needed here
+            ending_steps.append(steps)
+            # only need to find one exit per start
+            foundExit = 1
 
-print("Steps:", steps)
+        # go to next direction
+        di += 1
+        if (di >= mdi):
+            di = 0
+
+#print(ending_steps)
+# break the 6 endings amounts into 6 variables
+a, b, c, d, e, f = ending_steps
+#print(a, b, c, d, e, f )
+# get the least common multiple
+total_steps = lcm(a, b, c, d, e, f )
+# that's how many steps needed
+print("total steps needed:", total_steps)
