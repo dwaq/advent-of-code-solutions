@@ -28,8 +28,18 @@ for l, line in enumerate(txt):
 
         maze[k] = v
 
-# start here
-location = "AAA"
+# start at locations that end with "A"
+starting = []
+# list of all locations
+locations = list(maze.keys())
+
+# loop through all locations
+for l in locations:
+    # if it ends with "A", add it to list
+    if l[2] == "A":
+        starting.append(l)
+
+#print(starting)
 
 # steps to get there
 steps = 0
@@ -40,8 +50,10 @@ di = 0
 mdi = len(directions)
 #print(mdi)
 
+foundExit = 0
+
 # keep going until we finish
-while(location != "ZZZ"):
+while(foundExit == 0):
     # pick direction
     d = directions[di]
 
@@ -49,9 +61,21 @@ while(location != "ZZZ"):
     d = 0 if d=="L" else 1
     #print(d)
 
-    # change location based on direction
-    location = maze[location][d]
-    #print(location)
+    # change location based on direction FOR EACH starting point
+    for i, s in enumerate(starting):
+        starting[i] = maze[s][d]
+    #print(starting)
+
+    # assume we exit
+    foundExit = 1
+
+    # check if we made it to the exit
+    for s in starting:
+        #print(starting, s)
+        # if it doesn't end with "Z", we didn't exit
+        if s[2] != "Z":
+            foundExit = 0
+            break
 
     # go to next direction
     di += 1
