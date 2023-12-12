@@ -35,12 +35,12 @@ for sequence in txt:
     # first sequence is non-zero
     zero = False
 
-    # store last digits
-    lastDigits = []
+    # store first digits
+    firstDigits = []
 
     while (zero == False):
-        # last digit is the last item (duh)
-        lastDigits.append(seq[-1])
+        # first digit is the first item (duh)
+        firstDigits.append(seq[0])
 
         # calculate the differences between the array
         seq = getDifferences(seq)
@@ -48,13 +48,31 @@ for sequence in txt:
         # check if everything is 0 (exit condition)
         zero = all(x == 0 for x in seq)
 
-    #print("last digits:", lastDigits)
+    #print("first digits:", firstDigits)
     
-    # add all last digits to get next digit (add to get puzzle total)
-    total += sum(lastDigits)
+    # subtract each number from the previous (starting at the end)
+    # to get the next first digit
+    diff = 0
 
-    #print("next digit:", diff)
+    # length of list
+    l =  len(firstDigits)
 
-    #print("next digit:", lastDigits[0] + lastDigits[1])
+    # loop through each
+    for x in range(l):
+        # get index of the one we want (-1 to 0-index)
+        # starting at the end (-x)
+        i = l-x-1
+
+        # calculate difference from last
+        diff = firstDigits[i] - diff
+
+        #print(i, firstDigits[i], diff)
+        #print(d, firstDigits[i], i)
+        #diff -= d
+
+    #print("first digit:", diff)
+
+    # add that difference to overall total
+    total += diff
 
 print("Total:", total)
