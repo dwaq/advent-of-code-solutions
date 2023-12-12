@@ -102,8 +102,10 @@ while (puzzle[y][x] != "S"):
 
 for px, row in enumerate(puzzle):
     for py, col in enumerate(row):
+        # print @ on path
         if (py, px) in history:
-            print("*", end ="")
+            print("@", end ="")
+        # print . outside of path
         else:
-            print(col, end ="")
+            print(".", end ="")
     print()
